@@ -1,0 +1,641 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		195C0B95292E59F7006052B3 /* AVCaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0B94292E59F7006052B3 /* AVCaptureApp.swift */; };
+		195C0B97292E59F7006052B3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0B96292E59F7006052B3 /* ContentView.swift */; };
+		195C0B99292E59F7006052B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 195C0B98292E59F7006052B3 /* Assets.xcassets */; };
+		195C0B9D292E59F7006052B3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 195C0B9C292E59F7006052B3 /* Preview Assets.xcassets */; };
+		195C0BA7292E59F7006052B3 /* AVCaptureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0BA6292E59F7006052B3 /* AVCaptureTests.swift */; };
+		195C0BB1292E59F7006052B3 /* AVCaptureUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0BB0292E59F7006052B3 /* AVCaptureUITests.swift */; };
+		195C0BB3292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0BB2292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift */; };
+		19DCAA14292E5A3300FD0C85 /* AVFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DCAA13292E5A3300FD0C85 /* AVFormView.swift */; };
+		19DCAA16292E5A3C00FD0C85 /* AVCaptureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DCAA15292E5A3C00FD0C85 /* AVCaptureManager.swift */; };
+		19DCAA18292E5A4600FD0C85 /* AVCaptureDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DCAA17292E5A4600FD0C85 /* AVCaptureDevice.swift */; };
+		19DCAA1A292E5A4E00FD0C85 /* AVCaptureVideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DCAA19292E5A4E00FD0C85 /* AVCaptureVideoPreviewView.swift */; };
+		19DCAA1C292E5A5700FD0C85 /* FourCharCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DCAA1B292E5A5700FD0C85 /* FourCharCode.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		195C0BA3292E59F7006052B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 195C0B89292E59F7006052B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 195C0B90292E59F7006052B3;
+			remoteInfo = AVCapture;
+		};
+		195C0BAD292E59F7006052B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 195C0B89292E59F7006052B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 195C0B90292E59F7006052B3;
+			remoteInfo = AVCapture;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		195C0B91292E59F7006052B3 /* AVCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AVCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		195C0B94292E59F7006052B3 /* AVCaptureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureApp.swift; sourceTree = "<group>"; };
+		195C0B96292E59F7006052B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		195C0B98292E59F7006052B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		195C0B9A292E59F7006052B3 /* AVCapture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AVCapture.entitlements; sourceTree = "<group>"; };
+		195C0B9C292E59F7006052B3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		195C0BA2292E59F7006052B3 /* AVCaptureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AVCaptureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		195C0BA6292E59F7006052B3 /* AVCaptureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureTests.swift; sourceTree = "<group>"; };
+		195C0BAC292E59F7006052B3 /* AVCaptureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AVCaptureUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		195C0BB0292E59F7006052B3 /* AVCaptureUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureUITests.swift; sourceTree = "<group>"; };
+		195C0BB2292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		19DCAA13292E5A3300FD0C85 /* AVFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFormView.swift; sourceTree = "<group>"; };
+		19DCAA15292E5A3C00FD0C85 /* AVCaptureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureManager.swift; sourceTree = "<group>"; };
+		19DCAA17292E5A4600FD0C85 /* AVCaptureDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureDevice.swift; sourceTree = "<group>"; };
+		19DCAA19292E5A4E00FD0C85 /* AVCaptureVideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureVideoPreviewView.swift; sourceTree = "<group>"; };
+		19DCAA1B292E5A5700FD0C85 /* FourCharCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourCharCode.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		195C0B8E292E59F7006052B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		195C0B9F292E59F7006052B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		195C0BA9292E59F7006052B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		195C0B88292E59F7006052B3 = {
+			isa = PBXGroup;
+			children = (
+				195C0B93292E59F7006052B3 /* AVCapture */,
+				195C0BA5292E59F7006052B3 /* AVCaptureTests */,
+				195C0BAF292E59F7006052B3 /* AVCaptureUITests */,
+				195C0B92292E59F7006052B3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		195C0B92292E59F7006052B3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				195C0B91292E59F7006052B3 /* AVCapture.app */,
+				195C0BA2292E59F7006052B3 /* AVCaptureTests.xctest */,
+				195C0BAC292E59F7006052B3 /* AVCaptureUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		195C0B93292E59F7006052B3 /* AVCapture */ = {
+			isa = PBXGroup;
+			children = (
+				195C0B94292E59F7006052B3 /* AVCaptureApp.swift */,
+				195C0B96292E59F7006052B3 /* ContentView.swift */,
+				19DCAA13292E5A3300FD0C85 /* AVFormView.swift */,
+				19DCAA15292E5A3C00FD0C85 /* AVCaptureManager.swift */,
+				19DCAA17292E5A4600FD0C85 /* AVCaptureDevice.swift */,
+				19DCAA19292E5A4E00FD0C85 /* AVCaptureVideoPreviewView.swift */,
+				19DCAA1B292E5A5700FD0C85 /* FourCharCode.swift */,
+				195C0B98292E59F7006052B3 /* Assets.xcassets */,
+				195C0B9A292E59F7006052B3 /* AVCapture.entitlements */,
+				195C0B9B292E59F7006052B3 /* Preview Content */,
+			);
+			path = AVCapture;
+			sourceTree = "<group>";
+		};
+		195C0B9B292E59F7006052B3 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				195C0B9C292E59F7006052B3 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		195C0BA5292E59F7006052B3 /* AVCaptureTests */ = {
+			isa = PBXGroup;
+			children = (
+				195C0BA6292E59F7006052B3 /* AVCaptureTests.swift */,
+			);
+			path = AVCaptureTests;
+			sourceTree = "<group>";
+		};
+		195C0BAF292E59F7006052B3 /* AVCaptureUITests */ = {
+			isa = PBXGroup;
+			children = (
+				195C0BB0292E59F7006052B3 /* AVCaptureUITests.swift */,
+				195C0BB2292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift */,
+			);
+			path = AVCaptureUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		195C0B90292E59F7006052B3 /* AVCapture */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 195C0BB6292E59F7006052B3 /* Build configuration list for PBXNativeTarget "AVCapture" */;
+			buildPhases = (
+				195C0B8D292E59F7006052B3 /* Sources */,
+				195C0B8E292E59F7006052B3 /* Frameworks */,
+				195C0B8F292E59F7006052B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AVCapture;
+			productName = AVCapture;
+			productReference = 195C0B91292E59F7006052B3 /* AVCapture.app */;
+			productType = "com.apple.product-type.application";
+		};
+		195C0BA1292E59F7006052B3 /* AVCaptureTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 195C0BB9292E59F7006052B3 /* Build configuration list for PBXNativeTarget "AVCaptureTests" */;
+			buildPhases = (
+				195C0B9E292E59F7006052B3 /* Sources */,
+				195C0B9F292E59F7006052B3 /* Frameworks */,
+				195C0BA0292E59F7006052B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				195C0BA4292E59F7006052B3 /* PBXTargetDependency */,
+			);
+			name = AVCaptureTests;
+			productName = AVCaptureTests;
+			productReference = 195C0BA2292E59F7006052B3 /* AVCaptureTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		195C0BAB292E59F7006052B3 /* AVCaptureUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 195C0BBC292E59F7006052B3 /* Build configuration list for PBXNativeTarget "AVCaptureUITests" */;
+			buildPhases = (
+				195C0BA8292E59F7006052B3 /* Sources */,
+				195C0BA9292E59F7006052B3 /* Frameworks */,
+				195C0BAA292E59F7006052B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				195C0BAE292E59F7006052B3 /* PBXTargetDependency */,
+			);
+			name = AVCaptureUITests;
+			productName = AVCaptureUITests;
+			productReference = 195C0BAC292E59F7006052B3 /* AVCaptureUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		195C0B89292E59F7006052B3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					195C0B90292E59F7006052B3 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					195C0BA1292E59F7006052B3 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 195C0B90292E59F7006052B3;
+					};
+					195C0BAB292E59F7006052B3 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 195C0B90292E59F7006052B3;
+					};
+				};
+			};
+			buildConfigurationList = 195C0B8C292E59F7006052B3 /* Build configuration list for PBXProject "AVCapture" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 195C0B88292E59F7006052B3;
+			productRefGroup = 195C0B92292E59F7006052B3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				195C0B90292E59F7006052B3 /* AVCapture */,
+				195C0BA1292E59F7006052B3 /* AVCaptureTests */,
+				195C0BAB292E59F7006052B3 /* AVCaptureUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		195C0B8F292E59F7006052B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				195C0B9D292E59F7006052B3 /* Preview Assets.xcassets in Resources */,
+				195C0B99292E59F7006052B3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		195C0BA0292E59F7006052B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		195C0BAA292E59F7006052B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		195C0B8D292E59F7006052B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				195C0B97292E59F7006052B3 /* ContentView.swift in Sources */,
+				19DCAA14292E5A3300FD0C85 /* AVFormView.swift in Sources */,
+				19DCAA1C292E5A5700FD0C85 /* FourCharCode.swift in Sources */,
+				19DCAA18292E5A4600FD0C85 /* AVCaptureDevice.swift in Sources */,
+				19DCAA1A292E5A4E00FD0C85 /* AVCaptureVideoPreviewView.swift in Sources */,
+				195C0B95292E59F7006052B3 /* AVCaptureApp.swift in Sources */,
+				19DCAA16292E5A3C00FD0C85 /* AVCaptureManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		195C0B9E292E59F7006052B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				195C0BA7292E59F7006052B3 /* AVCaptureTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		195C0BA8292E59F7006052B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				195C0BB3292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift in Sources */,
+				195C0BB1292E59F7006052B3 /* AVCaptureUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		195C0BA4292E59F7006052B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 195C0B90292E59F7006052B3 /* AVCapture */;
+			targetProxy = 195C0BA3292E59F7006052B3 /* PBXContainerItemProxy */;
+		};
+		195C0BAE292E59F7006052B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 195C0B90292E59F7006052B3 /* AVCapture */;
+			targetProxy = 195C0BAD292E59F7006052B3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		195C0BB4292E59F7006052B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		195C0BB5292E59F7006052B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		195C0BB7292E59F7006052B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AVCapture/AVCapture.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AVCapture/Preview Content\"";
+				DEVELOPMENT_TEAM = 83XZ8ZBS6L;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to capture your video.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to capture your audio.";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCapture;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		195C0BB8292E59F7006052B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AVCapture/AVCapture.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AVCapture/Preview Content\"";
+				DEVELOPMENT_TEAM = 83XZ8ZBS6L;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to capture your video.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to capture your audio.";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCapture;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		195C0BBA292E59F7006052B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83XZ8ZBS6L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCaptureTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AVCapture.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AVCapture";
+			};
+			name = Debug;
+		};
+		195C0BBB292E59F7006052B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83XZ8ZBS6L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCaptureTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AVCapture.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AVCapture";
+			};
+			name = Release;
+		};
+		195C0BBD292E59F7006052B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83XZ8ZBS6L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCaptureUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AVCapture;
+			};
+			name = Debug;
+		};
+		195C0BBE292E59F7006052B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83XZ8ZBS6L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCaptureUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AVCapture;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		195C0B8C292E59F7006052B3 /* Build configuration list for PBXProject "AVCapture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				195C0BB4292E59F7006052B3 /* Debug */,
+				195C0BB5292E59F7006052B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		195C0BB6292E59F7006052B3 /* Build configuration list for PBXNativeTarget "AVCapture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				195C0BB7292E59F7006052B3 /* Debug */,
+				195C0BB8292E59F7006052B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		195C0BB9292E59F7006052B3 /* Build configuration list for PBXNativeTarget "AVCaptureTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				195C0BBA292E59F7006052B3 /* Debug */,
+				195C0BBB292E59F7006052B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		195C0BBC292E59F7006052B3 /* Build configuration list for PBXNativeTarget "AVCaptureUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				195C0BBD292E59F7006052B3 /* Debug */,
+				195C0BBE292E59F7006052B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 195C0B89292E59F7006052B3 /* Project object */;
+}
