@@ -47,24 +47,18 @@ struct ContentView: View {
         
         let hostingController = NSHostingController(
             rootView: AVCaptureVideoPreviewView(captureSession: captureManager.captureSession, videoGravity: .resizeAspectFill)
-                .ignoresSafeArea(.all, edges: .all)
                 .frame(
                     idealWidth: videoSize.width,
                     idealHeight: videoSize.height
                 )
-                .aspectRatio(
-                    videoSize.width / videoSize.height,
-                    contentMode: .fit
-                )
+                .ignoresSafeArea(.all, edges: .all)
         )
         hostingController.view.frame.size = videoSize
         
         let window = NSWindow(contentViewController: hostingController)
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
-        window.titlebarSeparatorStyle = .automatic
         window.styleMask.insert(.fullSizeContentView)
-        window.aspectRatio = videoSize
         window.contentAspectRatio = videoSize
         window.isMovableByWindowBackground = true
         window.makeKeyAndOrderFront(nil)
