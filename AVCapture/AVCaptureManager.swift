@@ -16,7 +16,7 @@ class AVCaptureManager: NSObject, ObservableObject {
         position: .unspecified
     )
     
-    let captureSession: AVCaptureSession = {
+    private(set) lazy var captureSession: AVCaptureSession = {
         let captureSession = AVCaptureSession()
         
         captureSession.beginConfiguration()
@@ -27,14 +27,12 @@ class AVCaptureManager: NSObject, ObservableObject {
             captureSession.isMultitaskingCameraAccessEnabled = true
         }
         #endif
-        
+
         captureSession.commitConfiguration()
         
         return captureSession
     }()
-    
-    private let captureMovieFileOutput = AVCaptureMovieFileOutput()
-    
+
     private var anyCancellables: Set<AnyCancellable> = []
     
     @Published var videoCaptureDevice: AVCaptureDevice? {
@@ -49,7 +47,45 @@ class AVCaptureManager: NSObject, ObservableObject {
         }
     }
     
+    #if os(macOS)
+    private let audioPreviewOutput = AVCaptureAudioPreviewOutput()
+    
+    var audioPreviewOutputDeviceUniqueID: String? {
+        get {
+            audioPreviewOutput.outputDeviceUniqueID
+        }
+        set {
+            objectWillChange.send()
+            audioPreviewOutput.outputDeviceUniqueID = newValue
+        }
+    }
+    
+    var audioPreviewOutputVolume: Float {
+        get {
+            audioPreviewOutput.volume
+        }
+        set {
+            objectWillChange.send()
+            audioPreviewOutput.volume = newValue
+        }
+    }
+    
+    @Published var isAudioPreviewing: Bool = false {
+        willSet {
+            if isAudioPreviewing, !newValue {
+                self.captureSession.removeOutput(audioPreviewOutput)
+            }
+        }
+        didSet {
+            if !oldValue, isAudioPreviewing {
+                self.captureSession.addOutput(audioPreviewOutput)
+            }
+        }
+    }
+    #endif
+    
     @Published var movieFileVideoCodecType: AVVideoCodecType = .h264
+    @Published var movieFileOutputAudioSettings = MovieFileOutputAudioSettings()
     
     @Published var error: Error?
     
@@ -196,11 +232,3 @@ extension AVCaptureManager {
         captureSession.commitConfiguration()
     }
 }
-//
-//  AVCaptureManager.swift
-//  AVCapture
-//
-//  Created by 강재홍 on 2022/11/23.
-//
-
-import Foundation

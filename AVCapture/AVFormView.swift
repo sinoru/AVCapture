@@ -11,6 +11,10 @@ import AVFoundation
 struct AVFormView: View {
     @ObservedObject var captureManager: AVCaptureManager
     
+    #if os(macOS)
+    @StateObject var audioOutputDeviceManager = AudioOutputDeviceManager()
+    #endif
+    
     @State var videoFrameRateRange: AVFrameRateRange?
     @FocusState var isFrameRateTextFieldFocused: Bool
     
@@ -146,9 +150,31 @@ struct AVFormView: View {
                 }
             }
             
+            #if os(macOS)
             Section("Preview") {
+                Toggle("Audio Preview", isOn: $captureManager.isAudioPreviewing)
                 
+                Picker(
+                    "Audio Preview Device",
+                    selection: $captureManager.audioPreviewOutputDeviceUniqueID
+                ) {
+                    Text("Default")
+                        .tag(String?.none)
+                    
+                    ForEach(audioOutputDeviceManager.audioDevices) { audioDevice in
+                        Text(audioDevice.name ?? "Unknown")
+                            .tag(audioDevice.uniqueID)
+                    }
+                }
+                
+                Slider(
+                    value: $captureManager.audioPreviewOutputVolume,
+                    in: 0.0...1.0
+                ) {
+                    Text("Audio Preview Volume")
+                }
             }
+            #endif
             
             Section("Output") {
                 Picker(
