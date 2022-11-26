@@ -10,7 +10,7 @@
 import Foundation
 import CoreAudio
 
-class AudioOutputDeviceManager: ObservableObject {
+actor AudioOutputDeviceManager: ObservableObject {
     private static let audioObjectSystemObject = AudioObjectID(kAudioObjectSystemObject)
     
     private var audioObjectPropertyAddress = AudioObjectPropertyAddress(
@@ -19,31 +19,39 @@ class AudioOutputDeviceManager: ObservableObject {
         mElement: kAudioObjectPropertyElementWildcard
     )
     
-    private lazy var dispatchQueue = DispatchQueue(
+    private lazy nonisolated var dispatchQueue = DispatchQueue(
         label: String(reflecting: self),
         qos: .default,
         autoreleaseFrequency: .workItem
     )
-    
-    private lazy var listnerBlock: AudioObjectPropertyListenerBlock = { [weak self] status, inAddresses in
+
+    private lazy nonisolated var listnerBlock: @convention(block) (UInt32, UnsafePointer<AudioObjectPropertyAddress>) -> Void = { [weak self] status, inAddresses in
         guard let self = self else { return }
-        
-        self.fetchDevices()
+
+        Task {
+            await self.run { `self` in
+                await self.fetchDevices()
+            }
+        }
     }
-    
-    @Published var audioDevices: [AudioDevice] = []
-    
+
+    @MainActor @Published var audioDevices: [AudioDevice] = []
+
     init() {
-        AudioObjectAddPropertyListenerBlock(Self.audioObjectSystemObject, &audioObjectPropertyAddress, dispatchQueue, listnerBlock)
-        
-        fetchDevices()
+        Task {
+            await run { `self` in
+                AudioObjectAddPropertyListenerBlock(Self.audioObjectSystemObject, &self.audioObjectPropertyAddress, dispatchQueue, self.listnerBlock)
+
+                await self.fetchDevices()
+            }
+        }
     }
     
     deinit {
-        AudioObjectRemovePropertyListenerBlock(Self.audioObjectSystemObject, &audioObjectPropertyAddress, dispatchQueue, listnerBlock)
+        AudioObjectRemovePropertyListenerBlock(Self.audioObjectSystemObject, &self.audioObjectPropertyAddress, dispatchQueue, self.listnerBlock)
     }
     
-    private func fetchDevices() {
+    private func fetchDevices() async {
         var devicesListPropertySize: UInt32 = 0
         
         let getPropertyDataSizeStatus = AudioObjectGetPropertyDataSize(
@@ -57,8 +65,7 @@ class AudioOutputDeviceManager: ObservableObject {
         guard getPropertyDataSizeStatus == noErr else {
             return
         }
-        
-        
+
         var devicesList: [AudioDeviceID] = .init(
             repeating: kAudioObjectUnknown,
             count: Int(devicesListPropertySize) / MemoryLayout<AudioDeviceID>.size
@@ -77,8 +84,10 @@ class AudioOutputDeviceManager: ObservableObject {
             return
         }
         
-        self.audioDevices = devicesList.map {
-            AudioDevice(id: $0)
+        await MainActor.run { [devicesList] in
+            self.audioDevices = devicesList.map {
+                AudioDevice(id: $0)
+            }
         }
     }
 }

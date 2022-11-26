@@ -16,6 +16,7 @@
 		195C0BB3292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0BB2292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift */; };
 		1988C6312932001C001DAD74 /* PathControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1988C6302932001C001DAD74 /* PathControl.swift */; };
 		1988C63329322E85001DAD74 /* AVMetadataItem+AVCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */; };
+		1988C63829326976001DAD74 /* Actor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1988C63729326976001DAD74 /* Actor.swift */; };
 		19892B3D2930777100B9ACBA /* AudioOutputSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19892B3C2930777100B9ACBA /* AudioOutputSettings.swift */; };
 		19892B3F293080C100B9ACBA /* VideoOutputSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19892B3E293080C100B9ACBA /* VideoOutputSettings.swift */; };
 		19892B412930811600B9ACBA /* AVFormView+InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19892B402930811600B9ACBA /* AVFormView+InputView.swift */; };
@@ -61,6 +62,7 @@
 		1988C6302932001C001DAD74 /* PathControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathControl.swift; sourceTree = "<group>"; };
 		1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVMetadataItem+AVCapture.swift"; sourceTree = "<group>"; };
 		1988C63529325A55001DAD74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1988C63729326976001DAD74 /* Actor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actor.swift; sourceTree = "<group>"; };
 		19892B3C2930777100B9ACBA /* AudioOutputSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioOutputSettings.swift; sourceTree = "<group>"; };
 		19892B3E293080C100B9ACBA /* VideoOutputSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoOutputSettings.swift; sourceTree = "<group>"; };
 		19892B402930811600B9ACBA /* AVFormView+InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFormView+InputView.swift"; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				19F6D72B292FCD2100B41CB0 /* AudioOutputDeviceManager+AudioDevice.swift */,
 				1988C6302932001C001DAD74 /* PathControl.swift */,
 				1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */,
+				1988C63729326976001DAD74 /* Actor.swift */,
 				195C0B98292E59F7006052B3 /* Assets.xcassets */,
 				195C0B9A292E59F7006052B3 /* AVCapture.entitlements */,
 				1988C63529325A55001DAD74 /* Info.plist */,
@@ -315,6 +318,7 @@
 				195C0B95292E59F7006052B3 /* AVCaptureApp.swift in Sources */,
 				1988C6312932001C001DAD74 /* PathControl.swift in Sources */,
 				19DCAA16292E5A3C00FD0C85 /* AVCaptureManager.swift in Sources */,
+				1988C63829326976001DAD74 /* Actor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

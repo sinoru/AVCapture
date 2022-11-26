@@ -11,7 +11,7 @@ import Foundation
 import CoreAudio
 
 extension AudioOutputDeviceManager {
-    struct AudioDevice: Identifiable {
+    struct AudioDevice: Equatable, Hashable, Identifiable, Sendable {
         let id: AudioDeviceID
         
         init(id: AudioDeviceID) {
