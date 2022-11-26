@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		191D2FC62932834C00252450 /* AVCaptureAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191D2FC52932834C00252450 /* AVCaptureAppDelegate.swift */; };
+		191D2FC82932837900252450 /* AVCaptureAppDelegate+NSApplicationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191D2FC72932837900252450 /* AVCaptureAppDelegate+NSApplicationDelegate.swift */; };
 		195C0B95292E59F7006052B3 /* AVCaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0B94292E59F7006052B3 /* AVCaptureApp.swift */; };
 		195C0B97292E59F7006052B3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0B96292E59F7006052B3 /* ContentView.swift */; };
 		195C0B99292E59F7006052B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 195C0B98292E59F7006052B3 /* Assets.xcassets */; };
@@ -48,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		191D2FC52932834C00252450 /* AVCaptureAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureAppDelegate.swift; sourceTree = "<group>"; };
+		191D2FC72932837900252450 /* AVCaptureAppDelegate+NSApplicationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureAppDelegate+NSApplicationDelegate.swift"; sourceTree = "<group>"; };
 		195C0B91292E59F7006052B3 /* AVCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AVCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		195C0B94292E59F7006052B3 /* AVCaptureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureApp.swift; sourceTree = "<group>"; };
 		195C0B96292E59F7006052B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -125,6 +129,8 @@
 			isa = PBXGroup;
 			children = (
 				195C0B94292E59F7006052B3 /* AVCaptureApp.swift */,
+				191D2FC52932834C00252450 /* AVCaptureAppDelegate.swift */,
+				191D2FC72932837900252450 /* AVCaptureAppDelegate+NSApplicationDelegate.swift */,
 				195C0B96292E59F7006052B3 /* ContentView.swift */,
 				19DCAA13292E5A3300FD0C85 /* AVFormView.swift */,
 				19892B402930811600B9ACBA /* AVFormView+InputView.swift */,
@@ -309,6 +315,7 @@
 				19F6D72A292FC5D000B41CB0 /* AudioOutputDeviceManager.swift in Sources */,
 				19DCAA1C292E5A5700FD0C85 /* FourCharCode.swift in Sources */,
 				19892B43293081AC00B9ACBA /* AVFormView+OutputView.swift in Sources */,
+				191D2FC82932837900252450 /* AVCaptureAppDelegate+NSApplicationDelegate.swift in Sources */,
 				1988C63329322E85001DAD74 /* AVMetadataItem+AVCapture.swift in Sources */,
 				19892B412930811600B9ACBA /* AVFormView+InputView.swift in Sources */,
 				19892B3D2930777100B9ACBA /* AudioOutputSettings.swift in Sources */,
@@ -316,6 +323,7 @@
 				19DCAA18292E5A4600FD0C85 /* AVCaptureDevice.swift in Sources */,
 				19DCAA1A292E5A4E00FD0C85 /* AVCaptureVideoPreviewView.swift in Sources */,
 				195C0B95292E59F7006052B3 /* AVCaptureApp.swift in Sources */,
+				191D2FC62932834C00252450 /* AVCaptureAppDelegate.swift in Sources */,
 				1988C6312932001C001DAD74 /* PathControl.swift in Sources */,
 				19DCAA16292E5A3C00FD0C85 /* AVCaptureManager.swift in Sources */,
 				1988C63829326976001DAD74 /* Actor.swift in Sources */,
@@ -502,6 +510,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCapture;
@@ -538,6 +547,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.sinoru.AVCapture;

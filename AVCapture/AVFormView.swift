@@ -101,6 +101,7 @@ struct AVFormView: View {
                     Text("Recording to \(currentMovieFileOutputFileURL)")
                 }
             }
+            .onDisappear(perform: stop)
         }
         .formStyle(.grouped)
         .alert("Error", isPresented: $isErrorPresented, presenting: captureManager.error) { _ in

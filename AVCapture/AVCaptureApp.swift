@@ -9,6 +9,10 @@ import SwiftUI
 
 @main
 struct AVCaptureApp: App {
+    #if os(macOS)
+    @NSApplicationDelegateAdaptor(AVCaptureAppDelegate.self) var appDelegate
+    #endif
+
     var body: some Scene {
         WindowGroup {
             ContentView()
