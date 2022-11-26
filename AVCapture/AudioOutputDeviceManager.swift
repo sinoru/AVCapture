@@ -16,7 +16,7 @@ class AudioOutputDeviceManager: ObservableObject {
     private var audioObjectPropertyAddress = AudioObjectPropertyAddress(
         mSelector: kAudioHardwarePropertyDevices,
         mScope: kAudioObjectPropertyScopeOutput,
-        mElement: kAudioObjectPropertyElementMain
+        mElement: kAudioObjectPropertyElementWildcard
     )
     
     private lazy var dispatchQueue = DispatchQueue(
@@ -34,13 +34,13 @@ class AudioOutputDeviceManager: ObservableObject {
     @Published var audioDevices: [AudioDevice] = []
     
     init() {
-        AudioObjectAddPropertyListenerBlock(.init(kAudioObjectSystemObject), &audioObjectPropertyAddress, dispatchQueue, listnerBlock)
+        AudioObjectAddPropertyListenerBlock(Self.audioObjectSystemObject, &audioObjectPropertyAddress, dispatchQueue, listnerBlock)
         
         fetchDevices()
     }
     
     deinit {
-        AudioObjectRemovePropertyListenerBlock(.init(kAudioObjectSystemObject), &audioObjectPropertyAddress, dispatchQueue, listnerBlock)
+        AudioObjectRemovePropertyListenerBlock(Self.audioObjectSystemObject, &audioObjectPropertyAddress, dispatchQueue, listnerBlock)
     }
     
     private func fetchDevices() {

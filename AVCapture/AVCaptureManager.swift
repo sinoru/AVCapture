@@ -34,10 +34,22 @@ class AVCaptureManager: NSObject, ObservableObject {
     }()
 
     private var anyCancellables: Set<AnyCancellable> = []
+
+    private var videoCaptureDeviceAnyCancellables: Set<AnyCancellable> = []
     
     @Published var videoCaptureDevice: AVCaptureDevice? {
         willSet {
+            videoCaptureDeviceAnyCancellables = []
+
             updateCaptureSession(videoDevice: newValue, audioDevice: audioCaptureDevice)
+        }
+        didSet {
+            videoCaptureDevice?
+                .publisher(for: \.formats)
+                .sink { [objectWillChange] _ in
+                    objectWillChange.send()
+                }
+                .store(in: &videoCaptureDeviceAnyCancellables)
         }
     }
     
@@ -84,8 +96,8 @@ class AVCaptureManager: NSObject, ObservableObject {
     }
     #endif
     
-    @Published var movieFileVideoCodecType: AVVideoCodecType = .h264
-    @Published var movieFileOutputAudioSettings = MovieFileOutputAudioSettings()
+    @Published var movieFileVideoOutputSettings = VideoOutputSettings()
+    @Published var movieFileAudioOutputSettings = AudioOutputSettings()
     
     @Published var error: Error?
     
@@ -122,6 +134,10 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
+    var videoCaptureDeviceFormats: [AVCaptureDevice.Format]? {
+        videoCaptureDevice?.formats
+    }
+
     var videoCaptureDeviceFormat: AVCaptureDevice.Format? {
         get {
             videoCaptureDevice?.activeFormat
@@ -180,11 +196,13 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
-    var availableVideoCodecTypes: [AVVideoCodecType] {
+    var availableVideoCodecs: [VideoOutputSettings.VideoCodec] {
         #if os(iOS)
-        captureMovieFileOutput.availableVideoCodecTypes
+        captureMovieFileOutput.availableVideoCodecTypes.map {
+            VideoOutputSettings.VideoCodec(type: $0)
+        }
         #else
-        [.h264, .hevc, .hevcWithAlpha, .jpeg, .proRes422, .proRes422LT, .proRes422HQ, .proRes422Proxy, .proRes4444, .proRes4444XQ]
+        VideoOutputSettings.VideoCodec.allCases
         #endif
     }
 }

@@ -7,9 +7,13 @@
 
 import SwiftUI
 import AppKit
+import Foundation
 
 struct ContentView: View {
     @StateObject var captureManager = AVCaptureManager()
+    #if os(macOS)
+    @State var previewingActivity: NSObjectProtocol?
+    #endif
     
     var body: some View {
         VStack {
@@ -26,6 +30,24 @@ struct ContentView: View {
                     #if os(macOS)
                     .contextMenu {
                         Button("Open in new window", action: openPreviewWindow)
+                    }
+                    .onAppear {
+                        guard self.previewingActivity == nil else {
+                            return
+                        }
+
+                        self.previewingActivity = ProcessInfo.processInfo.beginActivity(
+                            options: [.idleSystemSleepDisabled, .automaticTerminationDisabled, .trackingEnabled],
+                            reason: "Previewing"
+                        )
+                    }
+                    .onDisappear {
+                        guard let previewingActivity else {
+                            return
+                        }
+
+                        ProcessInfo.processInfo.endActivity(previewingActivity)
+                        self.previewingActivity = nil
                     }
                     #endif
             }

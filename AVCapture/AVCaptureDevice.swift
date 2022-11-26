@@ -26,13 +26,3 @@ extension AVCaptureDevice.Format: Identifiable {
 extension AVFrameRateRange: Identifiable {
     
 }
-
-extension AVVideoCodecType: Identifiable {
-    public var id: some Hashable {
-        rawValue
-    }
-}
-
-extension AVVideoCodecType {
-    public static let proRes4444XQ: AVVideoCodecType = AVVideoCodecType(rawValue: FourCharCode(kCMVideoCodecType_AppleProRes4444XQ).description)
-}
