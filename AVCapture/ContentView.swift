@@ -85,6 +85,7 @@ struct ContentView: View {
         window.styleMask.insert(.fullSizeContentView)
         window.contentAspectRatio = videoSize
         window.isMovableByWindowBackground = true
+        window.title = String(localized: "\(Bundle.main.object(forInfoDictionaryKey: kCFBundleNameKey as String) as? String ?? "") Preview")
         window.makeKeyAndOrderFront(nil)
     }
     #endif
