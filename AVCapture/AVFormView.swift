@@ -13,6 +13,7 @@ struct AVFormView: View {
     
     #if os(macOS)
     @StateObject var audioOutputDeviceManager = AudioOutputDeviceManager()
+    @State var previewingActivity: NSObjectProtocol?
     #endif
     
     @State var isErrorPresented: Bool = false
@@ -21,8 +22,43 @@ struct AVFormView: View {
         Form {
             InputView(captureManager: captureManager)
 
-            #if os(macOS)
             Section("Preview") {
+                if let videoCaptureDeviceFormat = captureManager.videoCaptureDeviceFormat {
+                    AVCaptureVideoPreviewView(captureSession: captureManager.captureSession, videoGravity: .resizeAspectFill)
+                        .frame(
+                            maxWidth: CGFloat(videoCaptureDeviceFormat.formatDescription.dimensions.width),
+                            maxHeight: CGFloat(videoCaptureDeviceFormat.formatDescription.dimensions.height)
+                        )
+                        .aspectRatio(
+                            CGFloat(videoCaptureDeviceFormat.formatDescription.dimensions.width) / CGFloat(videoCaptureDeviceFormat.formatDescription.dimensions.height),
+                            contentMode: .fit
+                        )
+                        #if os(macOS)
+                        .contextMenu {
+                            Button("Open in new window", action: openPreviewWindow)
+                        }
+                        .onAppear {
+                            guard self.previewingActivity == nil else {
+                                return
+                            }
+
+                            self.previewingActivity = ProcessInfo.processInfo.beginActivity(
+                                options: [.idleSystemSleepDisabled, .automaticTerminationDisabled, .trackingEnabled],
+                                reason: "Previewing"
+                            )
+                        }
+                        .onDisappear {
+                            guard let previewingActivity else {
+                                return
+                            }
+
+                            ProcessInfo.processInfo.endActivity(previewingActivity)
+                            self.previewingActivity = nil
+                        }
+                        #endif
+                }
+
+                #if os(macOS)
                 Toggle("Audio Preview", isOn: $captureManager.isAudioPreviewing)
                 
                 Picker(
@@ -44,9 +80,9 @@ struct AVFormView: View {
                 ) {
                     Text("Audio Preview Volume")
                 }
+                #endif
             }
-            #endif
-            
+
             OutputView(captureManager: captureManager)
 
             Section("") {
@@ -65,6 +101,38 @@ struct AVFormView: View {
         }
         .padding()
     }
+
+    #if os(macOS)
+    private func openPreviewWindow() {
+        guard let videoCaptureDeviceFormat = captureManager.videoCaptureDeviceFormat else {
+            return
+        }
+
+        let videoSize = CGSize(
+            width: CGFloat(videoCaptureDeviceFormat.formatDescription.dimensions.width),
+            height: CGFloat(videoCaptureDeviceFormat.formatDescription.dimensions.height)
+        )
+
+        let hostingController = NSHostingController(
+            rootView: AVCaptureVideoPreviewView(captureSession: captureManager.captureSession, videoGravity: .resizeAspectFill)
+                .frame(
+                    idealWidth: videoSize.width,
+                    idealHeight: videoSize.height
+                )
+                .ignoresSafeArea(.all, edges: .all)
+        )
+        hostingController.view.frame.size = videoSize
+
+        let window = NSWindow(contentViewController: hostingController)
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        window.styleMask.insert(.fullSizeContentView)
+        window.contentAspectRatio = videoSize
+        window.isMovableByWindowBackground = true
+        window.title = String(localized: "\(Bundle.main.object(forInfoDictionaryKey: kCFBundleNameKey as String) as? String ?? "") Preview")
+        window.makeKeyAndOrderFront(nil)
+    }
+    #endif
 
     func record() {
         captureManager.record()
