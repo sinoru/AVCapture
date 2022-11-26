@@ -338,8 +338,13 @@ extension AVCaptureManager {
 
             if let videoCodec = movieFileVideoOutputSettings.videoCodec {
                 outputSettings[AVVideoCodecKey] = videoCodec.type
-                outputSettings[AVVideoCompressionPropertiesKey] = nil
             }
+
+            #if os(iOS)
+            for unsupportedOutputSettingsKey in Set(outputSettings.keys).subtracting(movieFileOutput.supportedOutputSettingsKeys(for: videoConnection)) {
+                outputSettings.removeValue(forKey: unsupportedOutputSettingsKey)
+            }
+            #endif
 
             movieFileOutput.setOutputSettings(outputSettings, for: videoConnection)
         }
@@ -352,8 +357,13 @@ extension AVCaptureManager {
 
             if let format = movieFileAudioOutputSettings.format {
                 outputSettings[AVFormatIDKey] = format.id
-                outputSettings[AVEncoderBitRatePerChannelKey] = nil
             }
+
+            #if os(iOS)
+            for unsupportedOutputSettingsKey in Set(outputSettings.keys).subtracting(movieFileOutput.supportedOutputSettingsKeys(for: audioConnection)) {
+                outputSettings.removeValue(forKey: unsupportedOutputSettingsKey)
+            }
+            #endif
 
             movieFileOutput.setOutputSettings(outputSettings, for: audioConnection)
         }
