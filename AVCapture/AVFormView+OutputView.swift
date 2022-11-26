@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 extension AVFormView {
     struct OutputView: View {
         @ObservedObject var captureManager: AVCaptureManager
 
         var body: some View {
-            Section("Output") {
+            Section("Output Format") {
                 Picker(
                     "Video Codec",
                     selection: $captureManager.movieFileVideoOutputSettings.videoCodec
@@ -37,6 +38,28 @@ extension AVFormView {
                         Text(audioFormat.name)
                             .tag(audioFormat as AudioOutputSettings.AudioFormat?)
                     }
+                }
+            }
+
+            Section {
+                #if os(macOS)
+                VStack(alignment: .listRowSeparatorLeading) {
+                    Text("Destination")
+
+                    PathControl(
+                        allowedTypes: [UTType.directory.identifier],
+                        style: .standard,
+                        url: $captureManager.movieFileOutputDestinationURL
+                    )
+                }
+                #endif
+
+                TextField("Filename Format", text: $captureManager.movieFileOutputFilenameFormat)
+            } header: {
+                Text("Output File")
+            } footer: {
+                if let movieFileOutputFilename = captureManager.movieFileOutputFileURL()?.pathComponents.last {
+                    Text(movieFileOutputFilename)
                 }
             }
         }

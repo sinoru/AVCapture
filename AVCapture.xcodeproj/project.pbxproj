@@ -14,6 +14,8 @@
 		195C0BA7292E59F7006052B3 /* AVCaptureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0BA6292E59F7006052B3 /* AVCaptureTests.swift */; };
 		195C0BB1292E59F7006052B3 /* AVCaptureUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0BB0292E59F7006052B3 /* AVCaptureUITests.swift */; };
 		195C0BB3292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C0BB2292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift */; };
+		1988C6312932001C001DAD74 /* PathControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1988C6302932001C001DAD74 /* PathControl.swift */; };
+		1988C63329322E85001DAD74 /* AVMetadataItem+AVCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */; };
 		19892B3D2930777100B9ACBA /* AudioOutputSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19892B3C2930777100B9ACBA /* AudioOutputSettings.swift */; };
 		19892B3F293080C100B9ACBA /* VideoOutputSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19892B3E293080C100B9ACBA /* VideoOutputSettings.swift */; };
 		19892B412930811600B9ACBA /* AVFormView+InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19892B402930811600B9ACBA /* AVFormView+InputView.swift */; };
@@ -56,6 +58,8 @@
 		195C0BAC292E59F7006052B3 /* AVCaptureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AVCaptureUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		195C0BB0292E59F7006052B3 /* AVCaptureUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureUITests.swift; sourceTree = "<group>"; };
 		195C0BB2292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1988C6302932001C001DAD74 /* PathControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathControl.swift; sourceTree = "<group>"; };
+		1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVMetadataItem+AVCapture.swift"; sourceTree = "<group>"; };
 		19892B3C2930777100B9ACBA /* AudioOutputSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioOutputSettings.swift; sourceTree = "<group>"; };
 		19892B3E293080C100B9ACBA /* VideoOutputSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoOutputSettings.swift; sourceTree = "<group>"; };
 		19892B402930811600B9ACBA /* AVFormView+InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFormView+InputView.swift"; sourceTree = "<group>"; };
@@ -130,6 +134,8 @@
 				19892B3E293080C100B9ACBA /* VideoOutputSettings.swift */,
 				19F6D729292FC5D000B41CB0 /* AudioOutputDeviceManager.swift */,
 				19F6D72B292FCD2100B41CB0 /* AudioOutputDeviceManager+AudioDevice.swift */,
+				1988C6302932001C001DAD74 /* PathControl.swift */,
+				1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */,
 				195C0B98292E59F7006052B3 /* Assets.xcassets */,
 				195C0B9A292E59F7006052B3 /* AVCapture.entitlements */,
 				195C0B9B292E59F7006052B3 /* Preview Content */,
@@ -298,12 +304,14 @@
 				19F6D72A292FC5D000B41CB0 /* AudioOutputDeviceManager.swift in Sources */,
 				19DCAA1C292E5A5700FD0C85 /* FourCharCode.swift in Sources */,
 				19892B43293081AC00B9ACBA /* AVFormView+OutputView.swift in Sources */,
+				1988C63329322E85001DAD74 /* AVMetadataItem+AVCapture.swift in Sources */,
 				19892B412930811600B9ACBA /* AVFormView+InputView.swift in Sources */,
 				19892B3D2930777100B9ACBA /* AudioOutputSettings.swift in Sources */,
 				19F6D72C292FCD2100B41CB0 /* AudioOutputDeviceManager+AudioDevice.swift in Sources */,
 				19DCAA18292E5A4600FD0C85 /* AVCaptureDevice.swift in Sources */,
 				19DCAA1A292E5A4E00FD0C85 /* AVCaptureVideoPreviewView.swift in Sources */,
 				195C0B95292E59F7006052B3 /* AVCaptureApp.swift in Sources */,
+				1988C6312932001C001DAD74 /* PathControl.swift in Sources */,
 				19DCAA16292E5A3C00FD0C85 /* AVCaptureManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

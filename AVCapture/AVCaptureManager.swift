@@ -36,6 +36,8 @@ class AVCaptureManager: NSObject, ObservableObject {
         }
         #endif
 
+        captureSession.addOutput(movieFileOutput)
+
         captureSession.commitConfiguration()
         
         return captureSession
@@ -49,15 +51,21 @@ class AVCaptureManager: NSObject, ObservableObject {
         willSet {
             videoCaptureDeviceAnyCancellables = []
 
-            updateCaptureSession(videoDevice: newValue, audioDevice: audioCaptureDevice)
-        }
-        didSet {
             videoCaptureDevice?
                 .publisher(for: \.formats)
                 .sink { [objectWillChange] _ in
                     objectWillChange.send()
                 }
                 .store(in: &videoCaptureDeviceAnyCancellables)
+
+            videoCaptureDevice?
+                .publisher(for: \.activeFormat)
+                .sink { [objectWillChange] _ in
+                    objectWillChange.send()
+                }
+                .store(in: &videoCaptureDeviceAnyCancellables)
+
+            updateCaptureSession(videoDevice: newValue, audioDevice: audioCaptureDevice)
         }
     }
     
@@ -69,26 +77,6 @@ class AVCaptureManager: NSObject, ObservableObject {
     
     #if os(macOS)
     private let audioPreviewOutput = AVCaptureAudioPreviewOutput()
-    
-    var audioPreviewOutputDeviceUniqueID: String? {
-        get {
-            audioPreviewOutput.outputDeviceUniqueID
-        }
-        set {
-            objectWillChange.send()
-            audioPreviewOutput.outputDeviceUniqueID = newValue
-        }
-    }
-    
-    var audioPreviewOutputVolume: Float {
-        get {
-            audioPreviewOutput.volume
-        }
-        set {
-            objectWillChange.send()
-            audioPreviewOutput.volume = newValue
-        }
-    }
     
     @Published var isAudioPreviewing: Bool = false {
         willSet {
@@ -104,9 +92,29 @@ class AVCaptureManager: NSObject, ObservableObject {
     }
     #endif
 
+    #if os(iOS)
+    var movieFileOutputDestinationURL: URL? {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    }
+    #else
+    @Published var movieFileOutputDestinationURL: URL? = FileManager.default.urls(for: .moviesDirectory, in: .userDomainMask).first?.resolvingSymlinksInPath() ?? URL(filePath: NSHomeDirectory())
+    #endif
+
+    @Published var movieFileOutputFilenameFormat: String = "AVCapture %yyyy-%MM-%dd %HH.%mm.%ss"
+
     private let movieFileOutput = AVCaptureMovieFileOutput()
-    @Published var movieFileVideoOutputSettings = VideoOutputSettings()
-    @Published var movieFileAudioOutputSettings = AudioOutputSettings()
+    @Published var movieFileVideoOutputSettings = VideoOutputSettings() {
+        didSet {
+            updateVideoOutputSettings()
+        }
+    }
+    @Published var movieFileAudioOutputSettings = AudioOutputSettings() {
+        didSet {
+            updateAudioOutputSettings()
+        }
+    }
+
+    @Published var isMovieFileOutputRecording: Bool = false
     
     @Published var error: Error?
     
@@ -155,7 +163,6 @@ extension AVCaptureManager {
             if let videoCaptureDevice, let newValue {
                 do {
                     try videoCaptureDevice.lockForConfiguration()
-                    objectWillChange.send()
                     videoCaptureDevice.activeFormat = newValue
                     videoCaptureDevice.unlockForConfiguration()
                 } catch {
@@ -183,10 +190,13 @@ extension AVCaptureManager {
                 
                 do {
                     try videoCaptureDevice.lockForConfiguration()
-                    objectWillChange.send()
                     videoCaptureDevice.activeVideoMinFrameDuration = newValue
                     videoCaptureDevice.activeVideoMaxFrameDuration = newValue
+                    objectWillChange.send()
                     videoCaptureDevice.unlockForConfiguration()
+
+                    debugPrint(videoCaptureDevice.activeVideoMinFrameDuration)
+                    debugPrint(videoCaptureDevice.activeVideoMaxFrameDuration)
                 } catch {
                     self.error = nil
                 }
@@ -203,6 +213,30 @@ extension AVCaptureManager {
         }
     }
 }
+
+#if os(macOS)
+extension AVCaptureManager {
+    var audioPreviewOutputDeviceUniqueID: String? {
+        get {
+            audioPreviewOutput.outputDeviceUniqueID
+        }
+        set {
+            objectWillChange.send()
+            audioPreviewOutput.outputDeviceUniqueID = newValue
+        }
+    }
+
+    var audioPreviewOutputVolume: Float {
+        get {
+            audioPreviewOutput.volume
+        }
+        set {
+            objectWillChange.send()
+            audioPreviewOutput.volume = newValue
+        }
+    }
+}
+#endif
 
 extension AVCaptureManager {
     var availableVideoCodecs: [VideoOutputSettings.VideoCodec] {
@@ -255,7 +289,111 @@ extension AVCaptureManager {
         } catch {
             self.error = error
         }
-        
+
+        updateVideoOutputSettings()
+        updateAudioOutputSettings()
+
+        objectWillChange.send()
         captureSession.commitConfiguration()
+    }
+}
+
+extension AVCaptureManager {
+    func movieFileOutputFileURL(date: Date = Date()) -> URL? {
+        guard let movieFileOutputDestinationURL else {
+            return nil
+        }
+
+        let dateFormatter = DateFormatter()
+        let date = Date()
+
+        let filename = movieFileOutputFilenameFormat
+            .replacing(/%(\w+)/) { match in
+                dateFormatter.dateFormat = String(match.1)
+
+                return dateFormatter.string(from: date)
+            }
+
+        return movieFileOutputDestinationURL.appendingPathComponent(filename, conformingTo: UTType.quickTimeMovie)
+    }
+
+    func movieFileOutputMetadata(date: Date = Date()) -> [AVMetadataItem] {
+        var metadata: [AVMetadataItem] = [
+            AVMutableMetadataItem(identifier: .commonIdentifierCreationDate, value: date as NSDate )
+        ].compactMap { $0 }
+
+        if let videoCaptureDevice {
+            metadata += [
+                AVMutableMetadataItem(identifier: .commonIdentifierMake, value: videoCaptureDevice.manufacturer as NSString ),
+                AVMutableMetadataItem(identifier: .commonIdentifierModel, value: videoCaptureDevice.localizedName as NSString )
+            ]
+        }
+
+        return metadata
+    }
+}
+
+extension AVCaptureManager {
+    private func updateVideoOutputSettings() {
+        if let videoConnection = movieFileOutput.connection(with: .video) {
+            movieFileOutput.setOutputSettings(nil, for: videoConnection)
+            var outputSettings = movieFileOutput.outputSettings(for: videoConnection)
+
+            if let videoCodec = movieFileVideoOutputSettings.videoCodec {
+                outputSettings[AVVideoCodecKey] = videoCodec.type
+                outputSettings[AVVideoCompressionPropertiesKey] = nil
+            }
+
+            debugPrint(outputSettings)
+
+            movieFileOutput.setOutputSettings(outputSettings, for: videoConnection)
+        }
+    }
+
+    private func updateAudioOutputSettings() {
+        if let audioConnection = movieFileOutput.connection(with: .audio) {
+            movieFileOutput.setOutputSettings(nil, for: audioConnection)
+            var outputSettings = movieFileOutput.outputSettings(for: audioConnection)
+
+            if let format = movieFileAudioOutputSettings.format {
+                outputSettings[AVFormatIDKey] = format.id
+                outputSettings[AVEncoderBitRatePerChannelKey] = nil
+            }
+
+            debugPrint(outputSettings)
+
+            movieFileOutput.setOutputSettings(outputSettings, for: audioConnection)
+        }
+    }
+}
+
+extension AVCaptureManager {
+    func record() {
+        let date = Date()
+
+        guard let movieFileOutputFileURL = movieFileOutputFileURL(date: date) else {
+            return
+        }
+
+        movieFileOutput.metadata = movieFileOutputMetadata(date: date)
+
+        isMovieFileOutputRecording = true
+        movieFileOutput.startRecording(to: movieFileOutputFileURL, recordingDelegate: self)
+    }
+
+    func stopRecording() {
+        movieFileOutput.stopRecording()
+    }
+}
+
+extension AVCaptureManager: AVCaptureFileOutputRecordingDelegate{
+    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+        if let error {
+            self.error = error
+        }
+
+        captureSession.removeOutput(output)
+
+        isMovieFileOutputRecording = false
     }
 }

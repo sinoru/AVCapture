@@ -50,7 +50,11 @@ struct AVFormView: View {
             OutputView(captureManager: captureManager)
 
             Section("") {
-                Button("Record", action: record)
+                if !captureManager.isMovieFileOutputRecording {
+                    Button("Record", action: record)
+                } else {
+                    Button("Stop", action: stop)
+                }
             }
         }
         .formStyle(.grouped)
@@ -63,7 +67,11 @@ struct AVFormView: View {
     }
 
     func record() {
+        captureManager.record()
+    }
 
+    func stop() {
+        captureManager.stopRecording()
     }
 }
 
