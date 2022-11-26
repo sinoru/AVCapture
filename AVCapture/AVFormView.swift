@@ -85,11 +85,20 @@ struct AVFormView: View {
 
             OutputView(captureManager: captureManager)
 
-            Section("") {
+            Section {
                 if !captureManager.isMovieFileOutputRecording {
                     Button("Record", action: record)
                 } else {
                     Button("Stop", action: stop)
+                }
+            } header: {
+                Text("")
+            } footer: {
+                if
+                    captureManager.isMovieFileOutputRecording,
+                    let currentMovieFileOutputFileURL = captureManager.currentMovieFileOutputFileURL
+                {
+                    Text("Recording to \(currentMovieFileOutputFileURL)")
                 }
             }
         }

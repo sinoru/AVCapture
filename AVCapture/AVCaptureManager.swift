@@ -296,6 +296,10 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
+    var currentMovieFileOutputFileURL: URL? {
+        movieFileOutput.outputFileURL
+    }
+
     func movieFileOutputFileURL(date: Date = Date()) -> URL? {
         guard let movieFileOutputDestinationURL else {
             return nil

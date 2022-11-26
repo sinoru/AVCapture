@@ -12,6 +12,15 @@ extension AVFormView {
     struct OutputView: View {
         @ObservedObject var captureManager: AVCaptureManager
 
+        var now: Date {
+            let calendar = Calendar.current
+
+            var dateComponents = calendar.dateComponents(in: .current, from: .now)
+            dateComponents.nanosecond = nil
+
+            return calendar.date(from: dateComponents) ?? .now
+        }
+
         var body: some View {
             Section("Output Format") {
                 Picker(
@@ -58,8 +67,10 @@ extension AVFormView {
             } header: {
                 Text("Output File")
             } footer: {
-                if let movieFileOutputFilename = captureManager.movieFileOutputFileURL()?.pathComponents.last {
-                    Text(movieFileOutputFilename)
+                TimelineView(.periodic(from: now, by: 1.0)) { timeline in
+                    if let movieFileOutputFilename = captureManager.movieFileOutputFileURL(date: timeline.date)?.pathComponents.last {
+                        Text(movieFileOutputFilename)
+                    }
                 }
             }
         }

@@ -58,15 +58,12 @@ extension AVFormView {
 
                     VStack {
                         HStack {
-                            Picker("", selection: $videoFrameRateRange) {
-                                if let videoSupportedFrameRateRanges = captureManager.videoCaptureDeviceFormat?.videoSupportedFrameRateRanges {
+                            if let videoSupportedFrameRateRanges = captureManager.videoCaptureDeviceFormat?.videoSupportedFrameRateRanges, videoSupportedFrameRateRanges.count > 1 {
+                                Picker("", selection: $videoFrameRateRange) {
                                     ForEach(videoSupportedFrameRateRanges) { videoFrameRateRange in
                                         Text("\(videoFrameRateRange.minFrameRate, specifier: "%.2f") - \(videoFrameRateRange.maxFrameRate, specifier: "%.2f")")
                                             .tag(videoFrameRateRange as AVFrameRateRange?)
                                     }
-                                } else {
-                                    Text("")
-                                        .tag(AVFrameRateRange?.none)
                                 }
                             }
 
