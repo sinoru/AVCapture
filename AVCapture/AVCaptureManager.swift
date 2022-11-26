@@ -176,7 +176,7 @@ extension AVCaptureManager {
 extension AVCaptureManager {
     var videoCaptureDeviceFrameDuration: CMTime? {
         get {
-            videoCaptureDevice?.activeVideoMaxFrameDuration
+            videoCaptureDevice?.activeVideoMinFrameDuration
         }
         set {
             if let videoCaptureDevice, let newValue {
