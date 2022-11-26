@@ -60,6 +60,7 @@
 		195C0BB2292E59F7006052B3 /* AVCaptureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1988C6302932001C001DAD74 /* PathControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathControl.swift; sourceTree = "<group>"; };
 		1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVMetadataItem+AVCapture.swift"; sourceTree = "<group>"; };
+		1988C63529325A55001DAD74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		19892B3C2930777100B9ACBA /* AudioOutputSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioOutputSettings.swift; sourceTree = "<group>"; };
 		19892B3E293080C100B9ACBA /* VideoOutputSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoOutputSettings.swift; sourceTree = "<group>"; };
 		19892B402930811600B9ACBA /* AVFormView+InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFormView+InputView.swift"; sourceTree = "<group>"; };
@@ -138,6 +139,7 @@
 				1988C63229322E85001DAD74 /* AVMetadataItem+AVCapture.swift */,
 				195C0B98292E59F7006052B3 /* Assets.xcassets */,
 				195C0B9A292E59F7006052B3 /* AVCapture.entitlements */,
+				1988C63529325A55001DAD74 /* Info.plist */,
 				195C0B9B292E59F7006052B3 /* Preview Content */,
 			);
 			path = AVCapture;
@@ -482,6 +484,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AVCapture/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to capture your video.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to capture your audio.";
@@ -517,6 +520,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AVCapture/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to capture your video.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to capture your audio.";
