@@ -10,8 +10,16 @@ import AVFoundation
 import Combine
 
 class AVCaptureManager: NSObject, ObservableObject {
+    private static let deviceTypes: [AVCaptureDevice.DeviceType] = {
+        #if os(iOS)
+        return [.builtInWideAngleCamera, .builtInMicrophone]
+        #else
+        return [.builtInWideAngleCamera, .builtInMicrophone, .deskViewCamera, .externalUnknown]
+        #endif
+    }()
+
     private let discoverySession = AVCaptureDevice.DiscoverySession(
-        deviceTypes: [.builtInWideAngleCamera, .builtInMicrophone, .deskViewCamera, .externalUnknown],
+        deviceTypes: AVCaptureManager.deviceTypes,
         mediaType: nil,
         position: .unspecified
     )
@@ -95,7 +103,8 @@ class AVCaptureManager: NSObject, ObservableObject {
         }
     }
     #endif
-    
+
+    private let movieFileOutput = AVCaptureMovieFileOutput()
     @Published var movieFileVideoOutputSettings = VideoOutputSettings()
     @Published var movieFileAudioOutputSettings = AudioOutputSettings()
     
@@ -198,7 +207,7 @@ extension AVCaptureManager {
 extension AVCaptureManager {
     var availableVideoCodecs: [VideoOutputSettings.VideoCodec] {
         #if os(iOS)
-        captureMovieFileOutput.availableVideoCodecTypes.map {
+        movieFileOutput.availableVideoCodecTypes.map {
             VideoOutputSettings.VideoCodec(type: $0)
         }
         #else

@@ -94,7 +94,53 @@ extension AVCaptureVideoPreviewView: NSViewRepresentable {
 #elseif os(iOS)
 import UIKit
 
+extension AVCaptureVideoPreviewView: UIViewRepresentable {
+    class UIView: UIKit.UIView {
+        override class var layerClass: AnyClass {
+            AVCaptureVideoPreviewLayer.self
+        }
 
+        var captureSession: AVCaptureSession {
+            didSet {
+                self.previewLayer?.session = captureSession
+            }
+        }
+        var videoGravity: VideoGravity {
+            didSet {
+                self.previewLayer?.videoGravity = videoGravity.avLayerVideoGravity
+            }
+        }
+
+        private var previewLayer: AVCaptureVideoPreviewLayer? {
+            self.layer as? AVCaptureVideoPreviewLayer
+        }
+
+        init(frame: CGRect, captureSession: AVCaptureSession, videoGravity: VideoGravity) {
+            self.captureSession = captureSession
+            self.videoGravity = videoGravity
+
+            super.init(frame: frame)
+
+            self.previewLayer?.session = captureSession
+            self.previewLayer?.videoGravity = videoGravity.avLayerVideoGravity
+        }
+
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+
+    typealias UIViewType = UIView
+
+    func makeUIView(context: Context) -> UIView {
+        UIView(frame: .zero, captureSession: captureSession, videoGravity: videoGravity)
+    }
+
+    func updateUIView(_ nsView: UIView, context: Context) {
+        nsView.captureSession = captureSession
+        nsView.videoGravity = videoGravity
+    }
+}
 #endif
 
 struct AVCaptureVideoPreviewView_Previews: PreviewProvider {
