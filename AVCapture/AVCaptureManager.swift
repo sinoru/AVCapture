@@ -194,9 +194,6 @@ extension AVCaptureManager {
                     videoCaptureDevice.activeVideoMaxFrameDuration = newValue
                     objectWillChange.send()
                     videoCaptureDevice.unlockForConfiguration()
-
-                    debugPrint(videoCaptureDevice.activeVideoMinFrameDuration)
-                    debugPrint(videoCaptureDevice.activeVideoMaxFrameDuration)
                 } catch {
                     self.error = nil
                 }
@@ -344,8 +341,6 @@ extension AVCaptureManager {
                 outputSettings[AVVideoCompressionPropertiesKey] = nil
             }
 
-            debugPrint(outputSettings)
-
             movieFileOutput.setOutputSettings(outputSettings, for: videoConnection)
         }
     }
@@ -359,8 +354,6 @@ extension AVCaptureManager {
                 outputSettings[AVFormatIDKey] = format.id
                 outputSettings[AVEncoderBitRatePerChannelKey] = nil
             }
-
-            debugPrint(outputSettings)
 
             movieFileOutput.setOutputSettings(outputSettings, for: audioConnection)
         }
