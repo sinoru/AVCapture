@@ -10,7 +10,7 @@
 import Foundation
 import CoreAudio
 
-actor AudioOutputDeviceManager: ObservableObject {
+public actor AudioOutputDeviceManager: ObservableObject {
     private static let audioObjectSystemObject = AudioObjectID(kAudioObjectSystemObject)
     
     private var audioObjectPropertyAddress = AudioObjectPropertyAddress(
@@ -35,9 +35,10 @@ actor AudioOutputDeviceManager: ObservableObject {
         }
     }
 
-    @MainActor @Published var audioDevices: [AudioDevice] = []
+    @MainActor @Published
+    public var audioDevices: [AudioDevice] = []
 
-    init() {
+    public init() {
         Task {
             await run { `self` in
                 AudioObjectAddPropertyListenerBlock(Self.audioObjectSystemObject, &self.audioObjectPropertyAddress, dispatchQueue, self.listnerBlock)

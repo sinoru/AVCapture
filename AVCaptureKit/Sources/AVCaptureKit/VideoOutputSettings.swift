@@ -12,8 +12,8 @@ extension AVVideoCodecType {
     fileprivate static let proRes4444XQ: AVVideoCodecType = AVVideoCodecType(rawValue: FourCharCode(kCMVideoCodecType_AppleProRes4444XQ).description)
 }
 
-struct VideoOutputSettings {
-    enum VideoCodec: Hashable, Sendable {
+public struct VideoOutputSettings {
+    public enum VideoCodec: Hashable, Sendable {
         case h264
         case hevc
         case hevcWithAlpha
@@ -27,7 +27,7 @@ struct VideoOutputSettings {
         case other(AVVideoCodecType)
     }
 
-    var videoCodec: VideoCodec?
+    public var videoCodec: VideoCodec?
 }
 
 extension VideoOutputSettings.VideoCodec {
@@ -87,7 +87,7 @@ extension VideoOutputSettings.VideoCodec {
 }
 
 extension VideoOutputSettings.VideoCodec {
-    var name: String {
+    public var name: String {
         switch self {
         case .h264:
             return "H.264"
@@ -116,25 +116,25 @@ extension VideoOutputSettings.VideoCodec {
 }
 
 extension VideoOutputSettings.VideoCodec: Identifiable {
-    var id: some Hashable {
+    public var id: some Hashable {
         self.type
     }
 }
 
 extension VideoOutputSettings.VideoCodec: RawRepresentable {
-    typealias RawValue = AVVideoCodecType
+    public typealias RawValue = AVVideoCodecType
 
-    var rawValue: AVVideoCodecType {
+    public var rawValue: AVVideoCodecType {
         self.type
     }
 
-    init(rawValue: AVVideoCodecType) {
+    public init(rawValue: AVVideoCodecType) {
         self.init(type: rawValue)
     }
 }
 
 extension VideoOutputSettings.VideoCodec: CaseIterable {
-    static var allCases: [VideoOutputSettings.VideoCodec] {
+    public static var allCases: [VideoOutputSettings.VideoCodec] {
         [.h264, .hevc, .hevcWithAlpha, .jpeg, .proRes422, .proRes422LT, .proRes422HQ, .proRes422Proxy, .proRes4444, .proRes4444XQ]
     }
 }

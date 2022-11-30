@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import AVFoundation
+import AVCaptureKit
 
 struct AVFormView: View {
     @ObservedObject var captureManager: AVCaptureManager

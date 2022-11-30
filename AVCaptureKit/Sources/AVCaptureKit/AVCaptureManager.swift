@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 import Combine
 
-class AVCaptureManager: NSObject, ObservableObject {
+public class AVCaptureManager: NSObject, ObservableObject {
     private static let deviceTypes: [AVCaptureDevice.DeviceType] = {
         #if os(iOS)
         return [.builtInWideAngleCamera, .builtInMicrophone]
@@ -24,7 +24,7 @@ class AVCaptureManager: NSObject, ObservableObject {
         position: .unspecified
     )
     
-    private(set) lazy var captureSession: AVCaptureSession = {
+    public private(set) lazy var captureSession: AVCaptureSession = {
         let captureSession = AVCaptureSession()
         
         captureSession.beginConfiguration()
@@ -47,7 +47,7 @@ class AVCaptureManager: NSObject, ObservableObject {
 
     private var videoCaptureDeviceAnyCancellables: Set<AnyCancellable> = []
     
-    @Published var videoCaptureDevice: AVCaptureDevice? {
+    @Published public var videoCaptureDevice: AVCaptureDevice? {
         willSet {
             videoCaptureDeviceAnyCancellables = []
 
@@ -69,7 +69,7 @@ class AVCaptureManager: NSObject, ObservableObject {
         }
     }
     
-    @Published var audioCaptureDevice: AVCaptureDevice? {
+    @Published public var audioCaptureDevice: AVCaptureDevice? {
         willSet {
             updateCaptureSession(videoDevice: videoCaptureDevice, audioDevice: newValue)
         }
@@ -78,7 +78,7 @@ class AVCaptureManager: NSObject, ObservableObject {
     #if os(macOS)
     private let audioPreviewOutput = AVCaptureAudioPreviewOutput()
     
-    @Published var isAudioPreviewing: Bool = false {
+    @Published public var isAudioPreviewing: Bool = false {
         willSet {
             if isAudioPreviewing, !newValue {
                 self.captureSession.removeOutput(audioPreviewOutput)
@@ -93,32 +93,34 @@ class AVCaptureManager: NSObject, ObservableObject {
     #endif
 
     #if os(iOS)
-    var movieFileOutputDestinationURL: URL? {
+    public var movieFileOutputDestinationURL: URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     }
     #else
-    @Published var movieFileOutputDestinationURL: URL? = FileManager.default.urls(for: .moviesDirectory, in: .userDomainMask).first?.resolvingSymlinksInPath() ?? URL(filePath: NSHomeDirectory())
+    @Published public var movieFileOutputDestinationURL: URL? = FileManager.default.urls(for: .moviesDirectory, in: .userDomainMask).first?.resolvingSymlinksInPath() ?? URL(filePath: NSHomeDirectory())
     #endif
 
-    @Published var movieFileOutputFilenameFormat: String = "AVCapture %yyyy-%MM-%dd %HH.%mm.%ss"
+    @Published public var movieFileOutputFilenameFormat: String = "AVCapture %yyyy-%MM-%dd %HH.%mm.%ss"
 
     private let movieFileOutput = AVCaptureMovieFileOutput()
-    @Published var movieFileVideoOutputSettings = VideoOutputSettings() {
+    @Published
+    public var movieFileVideoOutputSettings = VideoOutputSettings() {
         didSet {
             updateVideoOutputSettings()
         }
     }
-    @Published var movieFileAudioOutputSettings = AudioOutputSettings() {
+    @Published
+    public var movieFileAudioOutputSettings = AudioOutputSettings() {
         didSet {
             updateAudioOutputSettings()
         }
     }
 
-    @Published var isMovieFileOutputRecording: Bool = false
+    @Published public var isMovieFileOutputRecording: Bool = false
     
-    @Published var error: Error?
+    @Published public private(set) var error: Error?
     
-    override init() {
+    public override init() {
         super.init()
         
         discoverySession
@@ -133,17 +135,17 @@ class AVCaptureManager: NSObject, ObservableObject {
 }
 
 extension AVCaptureManager {
-    var availableDevices: [AVCaptureDevice] {
+    public var availableDevices: [AVCaptureDevice] {
         discoverySession.devices
     }
     
-    var availableVideoDevices: [AVCaptureDevice] {
+    public var availableVideoDevices: [AVCaptureDevice] {
         availableDevices.filter {
             $0.hasMediaType(.video)
         }
     }
     
-    var availableAudioDevices: [AVCaptureDevice] {
+    public var availableAudioDevices: [AVCaptureDevice] {
         availableDevices.filter {
             $0.hasMediaType(.audio)
         }
@@ -151,11 +153,11 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
-    var videoCaptureDeviceFormats: [AVCaptureDevice.Format]? {
+    public var videoCaptureDeviceFormats: [AVCaptureDevice.Format]? {
         videoCaptureDevice?.formats
     }
 
-    var videoCaptureDeviceFormat: AVCaptureDevice.Format? {
+    public var videoCaptureDeviceFormat: AVCaptureDevice.Format? {
         get {
             videoCaptureDevice?.activeFormat
         }
@@ -174,7 +176,7 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
-    var videoCaptureDeviceFrameDuration: CMTime? {
+    public var videoCaptureDeviceFrameDuration: CMTime? {
         get {
             videoCaptureDevice?.activeVideoMinFrameDuration
         }
@@ -201,7 +203,7 @@ extension AVCaptureManager {
         }
     }
     
-    var videoCaptureDeviceFrameRate: Float64 {
+    public var videoCaptureDeviceFrameRate: Float64 {
         get {
             videoCaptureDeviceFrameDuration.flatMap { 1 / CMTimeGetSeconds($0) } ?? .nan
         }
@@ -213,7 +215,7 @@ extension AVCaptureManager {
 
 #if os(macOS)
 extension AVCaptureManager {
-    var audioPreviewOutputDeviceUniqueID: String? {
+    public var audioPreviewOutputDeviceUniqueID: String? {
         get {
             audioPreviewOutput.outputDeviceUniqueID
         }
@@ -223,7 +225,7 @@ extension AVCaptureManager {
         }
     }
 
-    var audioPreviewOutputVolume: Float {
+    public var audioPreviewOutputVolume: Float {
         get {
             audioPreviewOutput.volume
         }
@@ -236,7 +238,7 @@ extension AVCaptureManager {
 #endif
 
 extension AVCaptureManager {
-    var availableVideoCodecs: [VideoOutputSettings.VideoCodec] {
+    public var availableVideoCodecs: [VideoOutputSettings.VideoCodec] {
         #if os(iOS)
         movieFileOutput.availableVideoCodecTypes.map {
             VideoOutputSettings.VideoCodec(type: $0)
@@ -296,11 +298,11 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
-    var currentMovieFileOutputFileURL: URL? {
+    public var currentMovieFileOutputFileURL: URL? {
         movieFileOutput.outputFileURL
     }
 
-    func movieFileOutputFileURL(date: Date = Date()) -> URL? {
+    public func movieFileOutputFileURL(date: Date = Date()) -> URL? {
         guard let movieFileOutputDestinationURL else {
             return nil
         }
@@ -309,7 +311,7 @@ extension AVCaptureManager {
         let date = Date()
 
         let filename = movieFileOutputFilenameFormat
-            .replacing(/%(\w+)/) { match in
+            .replacing(#/%(\w+)/#) { match in
                 dateFormatter.dateFormat = String(match.1)
 
                 return dateFormatter.string(from: date)
@@ -375,7 +377,7 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
-    func record() {
+    public func record() {
         let date = Date()
 
         guard let movieFileOutputFileURL = movieFileOutputFileURL(date: date) else {
@@ -388,13 +390,13 @@ extension AVCaptureManager {
         movieFileOutput.startRecording(to: movieFileOutputFileURL, recordingDelegate: self)
     }
 
-    func stopRecording() {
+    public func stopRecording() {
         movieFileOutput.stopRecording()
     }
 }
 
 extension AVCaptureManager: AVCaptureFileOutputRecordingDelegate{
-    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         if let error {
             self.error = error
         }
