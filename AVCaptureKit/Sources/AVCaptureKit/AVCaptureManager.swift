@@ -92,13 +92,14 @@ public class AVCaptureManager: NSObject, ObservableObject {
     }
     #endif
 
-    #if os(iOS)
-    public var movieFileOutputDestinationURL: URL? {
+    @Published
+    public var movieFileOutputDestinationURL: URL? = {
+        #if os(iOS)
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-    }
-    #else
-    @Published public var movieFileOutputDestinationURL: URL? = FileManager.default.urls(for: .moviesDirectory, in: .userDomainMask).first?.resolvingSymlinksInPath() ?? URL(filePath: NSHomeDirectory())
-    #endif
+        #else
+        FileManager.default.urls(for: .moviesDirectory, in: .userDomainMask).first?.resolvingSymlinksInPath() ?? URL(filePath: NSHomeDirectory())
+        #endif
+    }()
 
     @Published public var movieFileOutputFilenameFormat: String = "AVCapture %yyyy-%MM-%dd %HH.%mm.%ss"
 
