@@ -104,6 +104,7 @@ public class AVCaptureManager: NSObject, ObservableObject {
     @Published public var movieFileOutputFilenameFormat: String = "AVCapture %yyyy-%MM-%dd %HH.%mm.%ss"
 
     private let movieFileOutput = AVCaptureMovieFileOutput()
+
     @Published
     public var movieFileVideoOutputSettings = VideoOutputSettings() {
         didSet {
@@ -290,9 +291,6 @@ extension AVCaptureManager {
             self.error = error
         }
 
-        updateVideoOutputSettings()
-        updateAudioOutputSettings()
-
         objectWillChange.send()
         captureSession.commitConfiguration()
     }
@@ -309,7 +307,6 @@ extension AVCaptureManager {
         }
 
         let dateFormatter = DateFormatter()
-        let date = Date()
 
         let filename = movieFileOutputFilenameFormat
             .replacing(#/%(\w+)/#) { match in
@@ -324,7 +321,7 @@ extension AVCaptureManager {
     func movieFileOutputMetadata(date: Date = Date()) -> [AVMetadataItem] {
         var metadata: [AVMetadataItem] = [
             AVMutableMetadataItem(identifier: .commonIdentifierCreationDate, value: date as NSDate )
-        ].compactMap { $0 }
+        ]
 
         if let videoCaptureDevice {
             metadata += [
@@ -345,6 +342,22 @@ extension AVCaptureManager {
 
             if let videoCodec = movieFileVideoOutputSettings.videoCodec {
                 outputSettings[AVVideoCodecKey] = videoCodec.type
+
+                switch videoCodec {
+                case .proRes422, .proRes422LT, .proRes422HQ, .proRes422Proxy, .proRes4444, .proRes4444XQ:
+                    if var compressionProperties = outputSettings[AVVideoCompressionPropertiesKey] as? [String: Any] {
+                        compressionProperties[AVVideoMaxKeyFrameIntervalDurationKey] = nil
+                        outputSettings[AVVideoCompressionPropertiesKey] = compressionProperties
+                    }
+                case .h264:
+                    break
+                case .hevc, .hevcWithAlpha:
+                    break
+                case .jpeg:
+                    break
+                case .other:
+                    break
+                }
             }
 
             #if os(iOS)
@@ -364,6 +377,17 @@ extension AVCaptureManager {
 
             if let format = movieFileAudioOutputSettings.format {
                 outputSettings[AVFormatIDKey] = format.id
+
+                switch format {
+                case .linearPCM:
+                    break
+                case .mpeg4AAC:
+                    break
+                case .appleLossless:
+                    outputSettings[AVEncoderBitRatePerChannelKey] = nil
+                case .other:
+                    break
+                }
             }
 
             #if os(iOS)
@@ -379,15 +403,16 @@ extension AVCaptureManager {
 
 extension AVCaptureManager {
     public func record() {
+        isMovieFileOutputRecording = true
+
         let date = Date()
 
         guard let movieFileOutputFileURL = movieFileOutputFileURL(date: date) else {
+            isMovieFileOutputRecording = false
             return
         }
 
         movieFileOutput.metadata = movieFileOutputMetadata(date: date)
-
-        isMovieFileOutputRecording = true
         movieFileOutput.startRecording(to: movieFileOutputFileURL, recordingDelegate: self)
     }
 
@@ -398,12 +423,12 @@ extension AVCaptureManager {
 
 extension AVCaptureManager: AVCaptureFileOutputRecordingDelegate{
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+        defer {
+            isMovieFileOutputRecording = false
+        }
+
         if let error {
             self.error = error
         }
-
-        captureSession.removeOutput(output)
-
-        isMovieFileOutputRecording = false
     }
 }
