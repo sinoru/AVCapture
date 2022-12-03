@@ -109,6 +109,11 @@ struct AVFormView: View {
         } message: {
             Text($0.localizedDescription)
         }
+        .onReceive(captureManager.$error) { _ in
+            if captureManager.error != nil {
+                isErrorPresented = true
+            }
+        }
         .padding()
     }
 
