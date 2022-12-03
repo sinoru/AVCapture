@@ -19,8 +19,8 @@ extension AVCaptureDevice.Format: Identifiable {
     public var localizedDescription: String {
         let description = String(describing: self)
         
-        return (description.wholeMatch(of: /<AV[\w\d]*Device.*> (.*)/)?.1).flatMap { String($0) } ??
-            (description.wholeMatch(of: /<AV[\w\d]*Device[\w\d]*: 0x[\w\d]+ (.*)>/)?.1).flatMap { String($0) } ??
+        return (description.wholeMatch(of: #/<AV[\w\d]*Device.*> (.*)/#)?.1).flatMap { String($0) } ??
+            (description.wholeMatch(of: #/<AV[\w\d]*Device[\w\d]*: 0x[\w\d]+ (.*)>/#)?.1).flatMap { String($0) } ??
             description
     }
 }

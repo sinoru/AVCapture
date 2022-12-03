@@ -8,48 +8,48 @@
 import Foundation
 import AVFoundation
 
-struct AudioOutputSettings {
-    enum AudioFormat: Hashable, Sendable {
+public struct AudioOutputSettings {
+    public enum AudioFormat: Hashable, Sendable {
         case linearPCM
         case mpeg4AAC
         case appleLossless
         case other(AudioFormatID)
     }
     
-    enum BitRateStrategy {
+    public enum BitRateStrategy {
         case constant
         case longTermAverage
         case variableConstrained
         case variable
     }
     
-    enum SampleRateConverterAlgorithm {
+    public enum SampleRateConverterAlgorithm {
         case normal
         case mastering
         case minimumPhase
     }
 
-    var format: AudioFormat?
-    var sampleRate: Float?
-    var numberOfChannels: Int?
+    public var format: AudioFormat?
+    public var sampleRate: Float?
+    public var numberOfChannels: Int?
 
-    var linearPCMBitDepth: Int?
-    var linearPCMIsBigEdian: Bool?
-    var linearPCMIsFloat: Bool?
+    public var linearPCMBitDepth: Int?
+    public var linearPCMIsBigEdian: Bool?
+    public var linearPCMIsFloat: Bool?
 
-    var encoderAudioQuality: AVAudioQuality?
-    var encoderAudioQualityForVBR: AVAudioQuality?
+    public var encoderAudioQuality: AVAudioQuality?
+    public var encoderAudioQualityForVBR: AVAudioQuality?
     
-    var encoderBitRate: Int?
-    var encoderBitRatePerChannel: Int?
-    var encoderBitRateStrategy: BitRateStrategy?
-    var encoderBitDepthHint: Int?
+    public var encoderBitRate: Int?
+    public var encoderBitRatePerChannel: Int?
+    public var encoderBitRateStrategy: BitRateStrategy?
+    public var encoderBitDepthHint: Int?
     
-    var sampleRateConverterAlgorithm: SampleRateConverterAlgorithm?
+    public var sampleRateConverterAlgorithm: SampleRateConverterAlgorithm?
 }
 
 extension AudioOutputSettings.AudioFormat {
-    init(id: AudioFormatID) {
+    public init(id: AudioFormatID) {
         switch id {
         case kAudioFormatLinearPCM:
             self = .linearPCM
@@ -62,7 +62,7 @@ extension AudioOutputSettings.AudioFormat {
         }
     }
     
-    var id: AudioFormatID {
+    public var id: AudioFormatID {
         switch self {
         case .linearPCM:
             return kAudioFormatLinearPCM
@@ -77,7 +77,7 @@ extension AudioOutputSettings.AudioFormat {
 }
 
 extension AudioOutputSettings.AudioFormat {
-    var name: String {
+    public var name: String {
         switch self {
         case .linearPCM:
             return "Linear PCM"
@@ -92,13 +92,13 @@ extension AudioOutputSettings.AudioFormat {
 }
 
 extension AudioOutputSettings.AudioFormat: RawRepresentable {
-    typealias RawValue = AudioFormatID
+    public typealias RawValue = AudioFormatID
     
-    init(rawValue: AudioFormatID) {
+    public init(rawValue: AudioFormatID) {
         self.init(id: rawValue)
     }
     
-    var rawValue: AudioFormatID {
+    public var rawValue: AudioFormatID {
         self.id
     }
 }
@@ -106,7 +106,7 @@ extension AudioOutputSettings.AudioFormat: RawRepresentable {
 extension AudioOutputSettings.AudioFormat: Identifiable { }
 
 extension AudioOutputSettings.AudioFormat: CaseIterable {
-    static var allCases: [AudioOutputSettings.AudioFormat] {
+    public static var allCases: [AudioOutputSettings.AudioFormat] {
         [.linearPCM, .mpeg4AAC, .appleLossless]
     }
 }

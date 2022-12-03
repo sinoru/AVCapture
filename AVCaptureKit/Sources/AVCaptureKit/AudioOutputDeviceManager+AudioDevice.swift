@@ -11,14 +11,14 @@ import Foundation
 import CoreAudio
 
 extension AudioOutputDeviceManager {
-    struct AudioDevice: Equatable, Hashable, Identifiable, Sendable {
-        let id: AudioDeviceID
+    public struct AudioDevice: Equatable, Hashable, Identifiable, Sendable {
+        public let id: AudioDeviceID
         
-        init(id: AudioDeviceID) {
+        public init(id: AudioDeviceID) {
             self.id = id
         }
         
-        var name: String? {
+        public var name: String? {
             var propertyAddress = AudioObjectPropertyAddress(
                 mSelector: kAudioObjectPropertyName,
                 mScope: kAudioObjectPropertyScopeGlobal,
@@ -40,7 +40,7 @@ extension AudioOutputDeviceManager {
             return name as String?
         }
         
-        var uniqueID: String? {
+        public var uniqueID: String? {
             var propertyAddress = AudioObjectPropertyAddress(
                 mSelector: kAudioDevicePropertyDeviceUID,
                 mScope: kAudioObjectPropertyScopeGlobal,

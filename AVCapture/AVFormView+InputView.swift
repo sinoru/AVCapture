@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import AVCaptureKit
 
 extension AVFormView {
     struct InputView: View {

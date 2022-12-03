@@ -10,6 +10,7 @@ import SwiftUI
 import AppKit
 #endif
 import Foundation
+import AVCaptureKit
 
 struct ContentView: View {
     @StateObject var captureManager = AVCaptureManager()

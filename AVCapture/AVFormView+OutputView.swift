@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import AVCaptureKit
 
 extension AVFormView {
     struct OutputView: View {
