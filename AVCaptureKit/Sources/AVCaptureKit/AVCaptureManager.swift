@@ -403,7 +403,7 @@ extension AVCaptureManager {
 
 extension AVCaptureManager {
     public func record() {
-        isMovieFileOutputRecording = true
+        movieFileOutput.stopRecording()
 
         let date = Date()
 
@@ -421,7 +421,11 @@ extension AVCaptureManager {
     }
 }
 
-extension AVCaptureManager: AVCaptureFileOutputRecordingDelegate{
+extension AVCaptureManager: AVCaptureFileOutputRecordingDelegate {
+    public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
+        isMovieFileOutputRecording = true
+    }
+
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         defer {
             isMovieFileOutputRecording = false
