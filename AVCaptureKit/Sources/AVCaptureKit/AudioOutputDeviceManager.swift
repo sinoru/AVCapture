@@ -13,7 +13,7 @@ import CoreAudio
 public actor AudioOutputDeviceManager: ObservableObject {
     private static let audioObjectSystemObject = AudioObjectID(kAudioObjectSystemObject)
     
-    private var audioObjectPropertyAddress = AudioObjectPropertyAddress(
+    private nonisolated let audioObjectPropertyAddress = AudioObjectPropertyAddress(
         mSelector: kAudioHardwarePropertyDevices,
         mScope: kAudioObjectPropertyScopeOutput,
         mElement: kAudioObjectPropertyElementWildcard
@@ -37,53 +37,67 @@ public actor AudioOutputDeviceManager: ObservableObject {
     public var audioDevices: [AudioDevice] = []
 
     public init() {
+        _ = listnerBlock
+
         Task {
             await run { `self` in
-                AudioObjectAddPropertyListenerBlock(Self.audioObjectSystemObject, &self.audioObjectPropertyAddress, dispatchQueue, self.listnerBlock)
+                _ = withUnsafePointer(to: audioObjectPropertyAddress) { audioObjectPropertyAddress in
+                    AudioObjectAddPropertyListenerBlock(Self.audioObjectSystemObject, audioObjectPropertyAddress, dispatchQueue, self.listnerBlock)
+                }
 
                 await self.fetchDevices()
             }
         }
     }
-    
+
     deinit {
-        AudioObjectRemovePropertyListenerBlock(Self.audioObjectSystemObject, &self.audioObjectPropertyAddress, dispatchQueue, self.listnerBlock)
+        _ = withUnsafePointer(to: audioObjectPropertyAddress) { audioObjectPropertyAddress in
+            AudioObjectRemovePropertyListenerBlock(Self.audioObjectSystemObject, audioObjectPropertyAddress, dispatchQueue, self.listnerBlock)
+        }
     }
-    
+
     private func fetchDevices() async {
-        var devicesListPropertySize: UInt32 = 0
-        
-        let getPropertyDataSizeStatus = AudioObjectGetPropertyDataSize(
-            Self.audioObjectSystemObject,
-            &audioObjectPropertyAddress,
-            0,
-            nil,
-            &devicesListPropertySize
-        )
-        
-        guard getPropertyDataSizeStatus == noErr else {
+        let devicesList: [AudioDeviceID]? = withUnsafePointer(to: audioObjectPropertyAddress) { audioObjectPropertyAddress in
+            var devicesListPropertySize: UInt32 = 0
+
+            let getPropertyDataSizeStatus = AudioObjectGetPropertyDataSize(
+                Self.audioObjectSystemObject,
+                audioObjectPropertyAddress,
+                0,
+                nil,
+                &devicesListPropertySize
+            )
+
+            guard getPropertyDataSizeStatus == noErr else {
+                return nil
+            }
+
+            var devicesList: [AudioDeviceID] = .init(
+                repeating: kAudioObjectUnknown,
+                count: Int(devicesListPropertySize) / MemoryLayout<AudioDeviceID>.size
+            )
+
+            let getPropertyDataStatus = AudioObjectGetPropertyData(
+                Self.audioObjectSystemObject,
+                audioObjectPropertyAddress,
+                0,
+                nil,
+                &devicesListPropertySize,
+                &devicesList
+            )
+
+            guard getPropertyDataStatus == noErr else {
+                return nil
+            }
+
+            return devicesList
+        }
+
+        guard let devicesList else {
             return
         }
 
-        var devicesList: [AudioDeviceID] = .init(
-            repeating: kAudioObjectUnknown,
-            count: Int(devicesListPropertySize) / MemoryLayout<AudioDeviceID>.size
-        )
-        
-        let getPropertyDataStatus = AudioObjectGetPropertyData(
-            Self.audioObjectSystemObject,
-            &audioObjectPropertyAddress,
-            0,
-            nil,
-            &devicesListPropertySize,
-            &devicesList
-        )
-        
-        guard getPropertyDataStatus == noErr else {
-            return
-        }
-        
-        await MainActor.run { [devicesList] in
+        await MainActor.run {
             self.audioDevices = devicesList.map {
                 AudioDevice(id: $0)
             }
