@@ -29,9 +29,7 @@ public actor AudioOutputDeviceManager: ObservableObject {
         guard let self = self else { return }
 
         Task {
-            await self.run { `self` in
-                await self.fetchDevices()
-            }
+            await self.fetchDevices()
         }
     }
 
