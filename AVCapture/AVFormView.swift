@@ -150,11 +150,15 @@ struct AVFormView: View {
     #endif
 
     func record() {
-        captureManager.record()
+        Task {
+            await captureManager.record()
+        }
     }
 
     func stop() {
-        captureManager.stopRecording()
+        Task {
+            await captureManager.stopRecording()
+        }
     }
 }
 

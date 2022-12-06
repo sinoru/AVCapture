@@ -23,36 +23,24 @@ public class AVCaptureManager: NSObject, ObservableObject {
         mediaType: nil,
         position: .unspecified
     )
+
+    actor CapureSessionActor { }
+    nonisolated let captureSessionActor = CapureSessionActor()
     
-    public private(set) lazy var captureSession: AVCaptureSession = {
-        let captureSession = AVCaptureSession()
-        
-        captureSession.beginConfiguration()
-        
-        #if os(iOS)
-        if captureSession.isMultitaskingCameraAccessSupported {
-            // Enable using the camera in multitasking modes.
-            captureSession.isMultitaskingCameraAccessEnabled = true
-        }
-        #endif
-
-        captureSession.addOutput(movieFileOutput)
-
-        captureSession.commitConfiguration()
-        
-        return captureSession
-    }()
+    public nonisolated let captureSession = AVCaptureSession()
 
     private var anyCancellables: Set<AnyCancellable> = []
 
     private var videoCaptureDeviceAnyCancellables: Set<AnyCancellable> = []
     
-    @Published public var videoCaptureDevice: AVCaptureDevice? {
+    @Published
+    public var videoCaptureDevice: AVCaptureDevice? {
         willSet {
             videoCaptureDeviceAnyCancellables = []
 
             videoCaptureDevice?
                 .publisher(for: \.formats)
+                .receive(on: RunLoop.main)
                 .sink { [objectWillChange] _ in
                     objectWillChange.send()
                 }
@@ -60,33 +48,58 @@ public class AVCaptureManager: NSObject, ObservableObject {
 
             videoCaptureDevice?
                 .publisher(for: \.activeFormat)
+                .receive(on: RunLoop.main)
                 .sink { [objectWillChange] _ in
                     objectWillChange.send()
                 }
                 .store(in: &videoCaptureDeviceAnyCancellables)
 
-            updateCaptureSession(videoDevice: newValue, audioDevice: audioCaptureDevice)
+            Task {
+                await updateCaptureSession(videoDevice: newValue, audioDevice: audioCaptureDevice)
+            }
         }
     }
     
-    @Published public var audioCaptureDevice: AVCaptureDevice? {
+    @Published
+    public var audioCaptureDevice: AVCaptureDevice? {
         willSet {
-            updateCaptureSession(videoDevice: videoCaptureDevice, audioDevice: newValue)
+            Task {
+                await updateCaptureSession(videoDevice: videoCaptureDevice, audioDevice: newValue)
+            }
         }
     }
     
     #if os(macOS)
     private let audioPreviewOutput = AVCaptureAudioPreviewOutput()
     
-    @Published public var isAudioPreviewing: Bool = false {
+    @Published
+    public var isAudioPreviewing: Bool = false {
         willSet {
             if isAudioPreviewing, !newValue {
-                self.captureSession.removeOutput(audioPreviewOutput)
+                Task {
+                    await captureSessionActor.run { _ in
+                        captureSession.beginConfiguration()
+                        defer {
+                            captureSession.commitConfiguration()
+                        }
+
+                        captureSession.removeOutput(audioPreviewOutput)
+                    }
+                }
             }
         }
         didSet {
             if !oldValue, isAudioPreviewing {
-                self.captureSession.addOutput(audioPreviewOutput)
+                Task {
+                    await captureSessionActor.run { _ in
+                        captureSession.beginConfiguration()
+                        defer {
+                            captureSession.commitConfiguration()
+                        }
+
+                        self.captureSession.addOutput(audioPreviewOutput)
+                    }
+                }
             }
         }
     }
@@ -101,38 +114,69 @@ public class AVCaptureManager: NSObject, ObservableObject {
         #endif
     }()
 
-    @Published public var movieFileOutputFilenameFormat: String = "AVCapture %yyyy-%MM-%dd %HH.%mm.%ss"
+    @Published
+    public var movieFileOutputFilenameFormat: String = "AVCapture %yyyy-%MM-%dd %HH.%mm.%ss"
 
     private let movieFileOutput = AVCaptureMovieFileOutput()
 
     @Published
     public var movieFileVideoOutputSettings = VideoOutputSettings() {
         didSet {
-            updateVideoOutputSettings()
+            Task {
+                await updateVideoOutputSettings()
+            }
         }
     }
     @Published
     public var movieFileAudioOutputSettings = AudioOutputSettings() {
         didSet {
-            updateAudioOutputSettings()
+            Task {
+                await updateAudioOutputSettings()
+            }
         }
     }
 
-    @Published public var isMovieFileOutputRecording: Bool = false
+    @Published
+    public var isMovieFileOutputRecording: Bool = false
     
-    @Published public private(set) var error: Error?
+    @Published
+    public private(set) var error: Error?
     
     public override init() {
         super.init()
         
         discoverySession
             .publisher(for: \.devices)
+            .receive(on: RunLoop.main)
             .sink { [objectWillChange] _ in
                 objectWillChange.send()
             }
             .store(in: &anyCancellables)
-        
-        captureSession.startRunning()
+
+        Task {
+            await initializeCaptureSession()
+        }
+    }
+}
+
+extension AVCaptureManager {
+    func initializeCaptureSession() async {
+        await captureSessionActor.run { _ in
+            captureSession.beginConfiguration()
+
+            #if os(iOS)
+            if captureSession.isMultitaskingCameraAccessSupported {
+                // Enable using the camera in multitasking modes.
+                captureSession.isMultitaskingCameraAccessEnabled = true
+            }
+            #endif
+
+            captureSession.addOutput(movieFileOutput)
+
+            captureSession.commitConfiguration()
+
+            captureSession.startRunning()
+        }
     }
 }
 
@@ -165,12 +209,16 @@ extension AVCaptureManager {
         }
         set {
             if let videoCaptureDevice, let newValue {
-                do {
-                    try videoCaptureDevice.lockForConfiguration()
-                    videoCaptureDevice.activeFormat = newValue
-                    videoCaptureDevice.unlockForConfiguration()
-                } catch {
-                    self.error = nil
+                Task {
+                    do {
+                        try await captureSessionActor.run { _ in
+                            try videoCaptureDevice.lockForConfiguration()
+                            videoCaptureDevice.activeFormat = newValue
+                            videoCaptureDevice.unlockForConfiguration()
+                        }
+                    } catch {
+                        self.error = error
+                    }
                 }
             }
         }
@@ -184,22 +232,28 @@ extension AVCaptureManager {
         }
         set {
             if let videoCaptureDevice, let newValue {
-                let newValue: CMTime = videoCaptureDevice.activeFormat.videoSupportedFrameRateRanges.reduce(
-                    videoCaptureDevice.activeFormat.videoSupportedFrameRateRanges.reduce(newValue) { partialResult, frameRateRange in
-                        CMTimeMinimum(partialResult, frameRateRange.maxFrameDuration)
+                Task {
+                    do {
+                        let newValue: CMTime = videoCaptureDevice.activeFormat.videoSupportedFrameRateRanges.reduce(
+                            videoCaptureDevice.activeFormat.videoSupportedFrameRateRanges.reduce(newValue) { partialResult, frameRateRange in
+                                CMTimeMinimum(partialResult, frameRateRange.maxFrameDuration)
+                            }
+                        ) { partialResult, frameRateRange in
+                            CMTimeMaximum(partialResult, frameRateRange.minFrameDuration)
+                        }
+
+                        try await captureSessionActor.run { _ in
+                            try videoCaptureDevice.lockForConfiguration()
+                            videoCaptureDevice.activeVideoMinFrameDuration = newValue
+                            videoCaptureDevice.activeVideoMaxFrameDuration = newValue
+                            await MainActor.run {
+                                objectWillChange.send()
+                            }
+                            videoCaptureDevice.unlockForConfiguration()
+                        }
+                    } catch {
+                        self.error = error
                     }
-                ) { partialResult, frameRateRange in
-                    CMTimeMaximum(partialResult, frameRateRange.minFrameDuration)
-                }
-                
-                do {
-                    try videoCaptureDevice.lockForConfiguration()
-                    videoCaptureDevice.activeVideoMinFrameDuration = newValue
-                    videoCaptureDevice.activeVideoMaxFrameDuration = newValue
-                    objectWillChange.send()
-                    videoCaptureDevice.unlockForConfiguration()
-                } catch {
-                    self.error = nil
                 }
             }
         }
@@ -252,47 +306,52 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
-    func updateCaptureSession(videoDevice newVideoDevice: AVCaptureDevice?, audioDevice newAudioDevice: AVCaptureDevice?) {
-        captureSession.beginConfiguration()
-        
-        do {
-            if videoCaptureDevice != newVideoDevice {
-                captureSession.inputs
-                    .lazy
-                    .compactMap {
-                        $0 as? AVCaptureDeviceInput
-                    }
-                    .filter { [videoCaptureDevice] in $0.device.uniqueID == videoCaptureDevice?.uniqueID }
-                    .forEach {
-                        captureSession.removeInput($0)
-                    }
+    func updateCaptureSession(videoDevice newVideoDevice: AVCaptureDevice?, audioDevice newAudioDevice: AVCaptureDevice?) async {
+        await captureSessionActor.run { _ in
+            captureSession.beginConfiguration()
+
+            do {
+                if videoCaptureDevice != newVideoDevice {
+                    captureSession.inputs
+                        .lazy
+                        .compactMap {
+                            $0 as? AVCaptureDeviceInput
+                        }
+                        .filter { [videoCaptureDevice] in $0.device.uniqueID == videoCaptureDevice?.uniqueID }
+                        .forEach {
+                            captureSession.removeInput($0)
+                        }
+                }
+
+                if let newVideoDevice {
+                    try captureSession.addInput(AVCaptureDeviceInput(device: newVideoDevice))
+                }
+
+                if audioCaptureDevice != newAudioDevice {
+                    captureSession.inputs
+                        .lazy
+                        .compactMap {
+                            $0 as? AVCaptureDeviceInput
+                        }
+                        .filter { [audioCaptureDevice] in $0.device.uniqueID == audioCaptureDevice?.uniqueID }
+                        .forEach {
+                            captureSession.removeInput($0)
+                        }
+                }
+
+                if let newAudioDevice {
+                    try captureSession.addInput(AVCaptureDeviceInput(device: newAudioDevice))
+                }
+            } catch {
+                self.error = error
             }
 
-            if let newVideoDevice {
-                try captureSession.addInput(AVCaptureDeviceInput(device: newVideoDevice))
+            await MainActor.run {
+                objectWillChange.send()
             }
-            
-            if audioCaptureDevice != newAudioDevice {
-                captureSession.inputs
-                    .lazy
-                    .compactMap {
-                        $0 as? AVCaptureDeviceInput
-                    }
-                    .filter { [audioCaptureDevice] in $0.device.uniqueID == audioCaptureDevice?.uniqueID }
-                    .forEach {
-                        captureSession.removeInput($0)
-                    }
-            }
-            
-            if let newAudioDevice {
-                try captureSession.addInput(AVCaptureDeviceInput(device: newAudioDevice))
-            }
-        } catch {
-            self.error = error
+
+            captureSession.commitConfiguration()
         }
-
-        objectWillChange.send()
-        captureSession.commitConfiguration()
     }
 }
 
@@ -335,100 +394,114 @@ extension AVCaptureManager {
 }
 
 extension AVCaptureManager {
-    private func updateVideoOutputSettings() {
-        if let videoConnection = movieFileOutput.connection(with: .video) {
-            movieFileOutput.setOutputSettings(nil, for: videoConnection)
-            var outputSettings = movieFileOutput.outputSettings(for: videoConnection)
+    private func updateVideoOutputSettings() async {
+        await captureSessionActor.run { _ in
+            if let videoConnection = movieFileOutput.connection(with: .video) {
+                movieFileOutput.setOutputSettings(nil, for: videoConnection)
+                var outputSettings = movieFileOutput.outputSettings(for: videoConnection)
 
-            if let videoCodec = movieFileVideoOutputSettings.videoCodec {
-                outputSettings[AVVideoCodecKey] = videoCodec.type
+                if let videoCodec = movieFileVideoOutputSettings.videoCodec {
+                    outputSettings[AVVideoCodecKey] = videoCodec.type
 
-                switch videoCodec {
-                case .proRes422, .proRes422LT, .proRes422HQ, .proRes422Proxy, .proRes4444, .proRes4444XQ:
-                    if var compressionProperties = outputSettings[AVVideoCompressionPropertiesKey] as? [String: Any] {
-                        compressionProperties[AVVideoMaxKeyFrameIntervalDurationKey] = nil
-                        outputSettings[AVVideoCompressionPropertiesKey] = compressionProperties
+                    switch videoCodec {
+                    case .proRes422, .proRes422LT, .proRes422HQ, .proRes422Proxy, .proRes4444, .proRes4444XQ:
+                        if var compressionProperties = outputSettings[AVVideoCompressionPropertiesKey] as? [String: Any] {
+                            compressionProperties[AVVideoMaxKeyFrameIntervalDurationKey] = nil
+                            outputSettings[AVVideoCompressionPropertiesKey] = compressionProperties
+                        }
+                    case .h264:
+                        break
+                    case .hevc, .hevcWithAlpha:
+                        break
+                    case .jpeg:
+                        break
+                    case .other:
+                        break
                     }
-                case .h264:
-                    break
-                case .hevc, .hevcWithAlpha:
-                    break
-                case .jpeg:
-                    break
-                case .other:
-                    break
                 }
-            }
 
-            #if os(iOS)
-            for unsupportedOutputSettingsKey in Set(outputSettings.keys).subtracting(movieFileOutput.supportedOutputSettingsKeys(for: videoConnection)) {
-                outputSettings.removeValue(forKey: unsupportedOutputSettingsKey)
-            }
-            #endif
+                #if os(iOS)
+                for unsupportedOutputSettingsKey in Set(outputSettings.keys).subtracting(movieFileOutput.supportedOutputSettingsKeys(for: videoConnection)) {
+                    outputSettings.removeValue(forKey: unsupportedOutputSettingsKey)
+                }
+                #endif
 
-            movieFileOutput.setOutputSettings(outputSettings, for: videoConnection)
+                movieFileOutput.setOutputSettings(outputSettings, for: videoConnection)
+            }
         }
     }
 
-    private func updateAudioOutputSettings() {
-        if let audioConnection = movieFileOutput.connection(with: .audio) {
-            movieFileOutput.setOutputSettings(nil, for: audioConnection)
-            var outputSettings = movieFileOutput.outputSettings(for: audioConnection)
+    private func updateAudioOutputSettings() async {
+        await captureSessionActor.run { _ in
+            if let audioConnection = movieFileOutput.connection(with: .audio) {
+                movieFileOutput.setOutputSettings(nil, for: audioConnection)
+                var outputSettings = movieFileOutput.outputSettings(for: audioConnection)
 
-            if let format = movieFileAudioOutputSettings.format {
-                outputSettings[AVFormatIDKey] = format.id
+                if let format = movieFileAudioOutputSettings.format {
+                    outputSettings[AVFormatIDKey] = format.id
 
-                switch format {
-                case .linearPCM:
-                    break
-                case .mpeg4AAC:
-                    break
-                case .appleLossless:
-                    outputSettings[AVEncoderBitRatePerChannelKey] = nil
-                case .other:
-                    break
+                    switch format {
+                    case .linearPCM:
+                        break
+                    case .mpeg4AAC:
+                        break
+                    case .appleLossless:
+                        outputSettings[AVEncoderBitRatePerChannelKey] = nil
+                    case .other:
+                        break
+                    }
                 }
-            }
 
-            #if os(iOS)
-            for unsupportedOutputSettingsKey in Set(outputSettings.keys).subtracting(movieFileOutput.supportedOutputSettingsKeys(for: audioConnection)) {
-                outputSettings.removeValue(forKey: unsupportedOutputSettingsKey)
-            }
-            #endif
+                #if os(iOS)
+                for unsupportedOutputSettingsKey in Set(outputSettings.keys).subtracting(movieFileOutput.supportedOutputSettingsKeys(for: audioConnection)) {
+                    outputSettings.removeValue(forKey: unsupportedOutputSettingsKey)
+                }
+                #endif
 
-            movieFileOutput.setOutputSettings(outputSettings, for: audioConnection)
+                movieFileOutput.setOutputSettings(outputSettings, for: audioConnection)
+            }
         }
     }
 }
 
 extension AVCaptureManager {
-    public func record() {
-        movieFileOutput.stopRecording()
+    public func record() async {
+        await captureSessionActor.run { _ in
+            let date = Date()
 
-        let date = Date()
+            guard let movieFileOutputFileURL = movieFileOutputFileURL(date: date) else {
+                isMovieFileOutputRecording = false
+                return
+            }
 
-        guard let movieFileOutputFileURL = movieFileOutputFileURL(date: date) else {
-            isMovieFileOutputRecording = false
-            return
+            movieFileOutput.metadata = movieFileOutputMetadata(date: date)
+            movieFileOutput.startRecording(to: movieFileOutputFileURL, recordingDelegate: self)
         }
-
-        movieFileOutput.metadata = movieFileOutputMetadata(date: date)
-        movieFileOutput.startRecording(to: movieFileOutputFileURL, recordingDelegate: self)
     }
 
-    public func stopRecording() {
-        movieFileOutput.stopRecording()
+    public func stopRecording() async {
+        await captureSessionActor.run { _ in
+            movieFileOutput.stopRecording()
+        }
     }
 }
 
 extension AVCaptureManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
-        isMovieFileOutputRecording = true
+        Task {
+            await MainActor.run {
+                isMovieFileOutputRecording = true
+            }
+        }
     }
 
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         defer {
-            isMovieFileOutputRecording = false
+            Task {
+                await MainActor.run {
+                    isMovieFileOutputRecording = false
+                }
+            }
         }
 
         if let error {
