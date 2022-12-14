@@ -271,7 +271,7 @@ extension AVCaptureManager {
 extension AVCaptureManager {
     public var availableVideoCodecs: [VideoOutputSettings.VideoCodec] {
         #if os(iOS)
-        movieFileOutput.availableVideoCodecTypes.map {
+        captureSessionActor._movieFileOutput.availableVideoCodecTypes.map {
             VideoOutputSettings.VideoCodec(type: $0)
         }
         #else
