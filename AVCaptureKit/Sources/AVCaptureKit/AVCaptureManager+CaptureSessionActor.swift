@@ -54,17 +54,15 @@ extension AVCaptureManager.CaptureSessionActor {
         }
 
         try configureSession { captureSession in
-            if oldDevice != newDevice {
-                captureSession.inputs
-                    .lazy
-                    .compactMap {
-                        $0 as? AVCaptureDeviceInput
-                    }
-                    .filter { $0.device.uniqueID == oldDevice?.uniqueID }
-                    .forEach {
-                        captureSession.removeInput($0)
-                    }
-            }
+            captureSession.inputs
+                .lazy
+                .compactMap {
+                    $0 as? AVCaptureDeviceInput
+                }
+                .filter { $0.device.uniqueID == oldDevice?.uniqueID }
+                .forEach {
+                    captureSession.removeInput($0)
+                }
 
             if let newDevice {
                 try captureSession.addInput(AVCaptureDeviceInput(device: newDevice))
