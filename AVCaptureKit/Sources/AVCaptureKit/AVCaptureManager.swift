@@ -49,12 +49,13 @@ public class AVCaptureManager: NSObject, ObservableObject {
                     }
                 },
             ]
-
-            Task {
+        }
+        didSet {
+            Task { [weak self, oldValue, videoCaptureDevice] in
                 do {
-                    try await captureSessionActor.updateDevice(oldDevice: videoCaptureDevice, newDevice: newValue)
+                    try await captureSessionActor.updateDevice(oldDevice: oldValue, newDevice: videoCaptureDevice)
                 } catch{
-                    self.error = error
+                    self?.error = error
                 }
             }
         }
@@ -62,12 +63,12 @@ public class AVCaptureManager: NSObject, ObservableObject {
 
     @Published
     public var audioCaptureDevice: AVCaptureDevice? {
-        willSet {
-            Task {
+        didSet {
+            Task { [weak self, oldValue, audioCaptureDevice] in
                 do {
-                    try await captureSessionActor.updateDevice(oldDevice: audioCaptureDevice, newDevice: newValue)
+                    try await captureSessionActor.updateDevice(oldDevice: oldValue, newDevice: audioCaptureDevice)
                 } catch{
-                    self.error = error
+                    self?.error = error
                 }
             }
         }
